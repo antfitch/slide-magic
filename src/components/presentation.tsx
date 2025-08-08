@@ -36,33 +36,30 @@ export interface Colors {
   background: string;
 }
 
-const fontMap = {
-  'inter-space-grotesk': {
-    name: 'Inter / Space Grotesk',
-    body: 'font-inter',
-    headline: 'font-space-grotesk',
-    url: 'https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&family=Space+Grotesk:wght@500;700&display=swap'
-  },
-  'roboto-slab-roboto': {
-    name: 'Roboto Slab / Roboto',
-    body: 'font-roboto-slab',
-    headline: 'font-roboto',
-    url: 'https://fonts.googleapis.com/css2?family=Roboto:wght@500;700&family=Roboto+Slab:wght@400;500;600;700&display=swap'
-  },
-  'lato-merriweather': {
-    name: 'Lato / Merriweather',
-    body: 'font-lato',
-    headline: 'font-merriweather',
-    url: 'https://fonts.googleapis.com/css2?family=Lato:wght@400;700&family=Merriweather:wght@400;700&display=swap'
-  },
-  'source-sans-pro-playfair-display': {
-    name: 'Source Sans Pro / Playfair Display',
-    body: 'font-source-sans-pro',
-    headline: 'font-playfair-display',
-    url: 'https://fonts.googleapis.com/css2?family=Source+Sans+Pro:wght@400;600;700&family=Playfair+Display:wght@500;700&display=swap'
-  },
-};
-type FontKey = keyof typeof fontMap;
+export type FontStyle = 'headline' | 'body';
+
+export interface Fonts {
+  headline: string;
+  body: string;
+}
+
+const fontOptions = [
+  { name: 'Inter', value: 'Inter' },
+  { name: 'Space Grotesk', value: 'Space Grotesk' },
+  { name: 'Roboto', value: 'Roboto' },
+  { name: 'Roboto Slab', value: 'Roboto Slab' },
+  { name: 'Lato', value: 'Lato' },
+  { name: 'Merriweather', value: 'Merriweather' },
+  { name: 'Source Sans Pro', value: 'Source Sans Pro' },
+  { name: 'Playfair Display', value: 'Playfair Display' },
+];
+
+function getFontUrl(fonts: Fonts) {
+  const familyParams = Object.values(fonts)
+    .map(font => `family=${font.replace(/ /g, '+')}:wght@400;500;600;700`)
+    .join('&');
+  return `https://fonts.googleapis.com/css2?${familyParams}&display=swap`;
+}
 
 export default function Presentation() {
   const [currentSlide, setCurrentSlide] = useState(0);
@@ -87,7 +84,10 @@ export default function Presentation() {
     accent: '26 100% 50%',
     background: '231 60% 94%',
   });
-  const [font, setFont] = useState<FontKey>('inter-space-grotesk');
+  const [fonts, setFonts] = useState<Fonts>({
+    headline: 'Space Grotesk',
+    body: 'Inter',
+  });
 
   useEffect(() => {
     const savedIntroMedia = localStorage.getItem('introMedia');
@@ -104,9 +104,11 @@ export default function Presentation() {
       setColors(parsedColors);
       updateCssVariables(parsedColors);
     }
-    const savedFont = localStorage.getItem('customFont') as FontKey;
-    if (savedFont && fontMap[savedFont]) {
-      handleFontChange(savedFont);
+    const savedFonts = localStorage.getItem('customFonts');
+    if (savedFonts) {
+        const parsedFonts = JSON.parse(savedFonts);
+        setFonts(parsedFonts);
+        updateFontStyles(parsedFonts);
     }
   }, []);
 
@@ -134,30 +136,20 @@ export default function Presentation() {
     updateCssVariables(newColors);
   };
 
-  const handleFontChange = (newFont: FontKey) => {
-    setFont(newFont);
-    localStorage.setItem('customFont', newFont);
-    const fontData = fontMap[newFont];
-    
-    // Update font link
+  const updateFontStyles = (newFonts: Fonts) => {
     const fontLink = document.getElementById('font-link') as HTMLLinkElement;
     if (fontLink) {
-      fontLink.href = fontData.url;
+        fontLink.href = getFontUrl(newFonts);
     }
+    document.documentElement.style.setProperty('--font-headline', newFonts.headline);
+    document.documentElement.style.setProperty('--font-body', newFonts.body);
+  };
 
-    // Update body and headline font classes on tailwind config
-    document.body.style.setProperty('--font-body', fontData.name.split(' / ')[0]);
-    document.body.style.setProperty('--font-headline', fontData.name.split(' / ')[1]);
-
-    // This is a bit of a hack to get tailwind to re-evaluate the font families
-    document.body.classList.forEach(className => {
-        if (className.startsWith('font-')) {
-            document.body.classList.remove(className);
-        }
-    });
-
-    document.body.classList.add(fontData.body);
-    // You might need a way to apply headline class to relevant elements
+  const handleFontChange = (type: FontStyle, newFont: string) => {
+    const newFonts = { ...fonts, [type]: newFont };
+    setFonts(newFonts);
+    localStorage.setItem('customFonts', JSON.stringify(newFonts));
+    updateFontStyles(newFonts);
   };
 
   const slideComponents = {
@@ -201,15 +193,16 @@ export default function Presentation() {
   const progressValue = ((currentSlide + 1) / slides.length) * 100;
 
   return (
-    <div className={`flex flex-col h-full w-full bg-background items-center justify-center p-8 relative overflow-hidden font-['var(--font-body)']`}>
+    <div className={`flex flex-col h-full w-full bg-background items-center justify-center p-8 relative overflow-hidden`}>
       <header className="absolute top-0 left-0 right-0 p-4 md:p-8">
         <div className="flex items-center justify-between max-w-5xl mx-auto">
-          <h1 className="text-2xl font-headline font-bold text-primary">DocuVision</h1>
+          <h1 className="text-2xl font-bold text-primary" style={{ fontFamily: 'var(--font-headline)' }}>DocuVision</h1>
           <AdminMenu 
             colors={colors} 
             onColorChange={handleColorChange}
-            font={font}
-            onFontChange={(newFont) => handleFontChange(newFont as FontKey)}
+            fonts={fonts}
+            onFontChange={handleFontChange}
+            fontOptions={fontOptions}
           >
              <Button variant="outline" size="icon">
                 <Settings className="h-4 w-4" />

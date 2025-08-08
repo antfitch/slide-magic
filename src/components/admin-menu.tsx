@@ -9,14 +9,15 @@ import { Button } from "@/components/ui/button";
 import { ThemeToggle } from '@/components/theme-toggle';
 import { Separator } from '@/components/ui/separator';
 import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from "@/components/ui/select";
-import type { Colors } from '@/components/presentation';
+import type { Colors, Fonts, FontStyle } from '@/components/presentation';
 
 interface AdminMenuProps {
   children: React.ReactNode;
   colors: Colors;
   onColorChange: (newColors: Colors) => void;
-  font: string;
-  onFontChange: (newFont: string) => void;
+  fonts: Fonts;
+  onFontChange: (type: FontStyle, newFont: string) => void;
+  fontOptions: { name: string; value: string; }[];
 }
 
 function hexToHsl(hex: string): string | null {
@@ -78,7 +79,7 @@ function hslToHex(hsl: string): string {
 }
 
 
-export function AdminMenu({ children, colors, onColorChange, font, onFontChange }: AdminMenuProps) {
+export function AdminMenu({ children, colors, onColorChange, fonts, onFontChange, fontOptions }: AdminMenuProps) {
     const [localColors, setLocalColors] = useState({
         primary: hslToHex(colors.primary),
         accent: hslToHex(colors.accent),
@@ -128,17 +129,32 @@ export function AdminMenu({ children, colors, onColorChange, font, onFontChange 
 
                     <div className="space-y-4">
                         <Label className="font-semibold">Fonts</Label>
-                        <Select value={font} onValueChange={onFontChange}>
-                            <SelectTrigger>
-                                <SelectValue placeholder="Select a font pair" />
-                            </SelectTrigger>
-                            <SelectContent>
-                                <SelectItem value="inter-space-grotesk">Inter / Space Grotesk</SelectItem>
-                                <SelectItem value="roboto-slab-roboto">Roboto Slab / Roboto</SelectItem>
-                                <SelectItem value="lato-merriweather">Lato / Merriweather</SelectItem>
-                                <SelectItem value="source-sans-pro-playfair-display">Source Sans Pro / Playfair Display</SelectItem>
-                            </SelectContent>
-                        </Select>
+                         <div className="grid grid-cols-[auto_1fr] items-center gap-2">
+                            <Label htmlFor="headline-font">Headline</Label>
+                            <Select value={fonts.headline} onValueChange={(val) => onFontChange('headline', val)}>
+                                <SelectTrigger id="headline-font">
+                                    <SelectValue placeholder="Select a font" />
+                                </SelectTrigger>
+                                <SelectContent>
+                                    {fontOptions.map(option => (
+                                        <SelectItem key={option.value} value={option.value}>{option.name}</SelectItem>
+                                    ))}
+                                </SelectContent>
+                            </Select>
+                        </div>
+                        <div className="grid grid-cols-[auto_1fr] items-center gap-2">
+                            <Label htmlFor="body-font">Body</Label>
+                             <Select value={fonts.body} onValueChange={(val) => onFontChange('body', val)}>
+                                <SelectTrigger id="body-font">
+                                    <SelectValue placeholder="Select a font" />
+                                </SelectTrigger>
+                                <SelectContent>
+                                    {fontOptions.map(option => (
+                                        <SelectItem key={option.value} value={option.value}>{option.name}</SelectItem>
+                                    ))}
+                                </SelectContent>
+                            </Select>
+                        </div>
                     </div>
 
                     <Separator />
