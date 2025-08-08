@@ -5,6 +5,7 @@ import Image from 'next/image';
 import { Card, CardContent, CardHeader, CardTitle, CardDescription } from '@/components/ui/card';
 import { Beaker } from 'lucide-react';
 import ImageSelectDialog from '@/components/image-select-dialog';
+import { ScrollArea } from '@/components/ui/scroll-area';
 
 interface Media {
   src: string;
@@ -51,6 +52,7 @@ export default function SlideExperiment({ media, onUploadComplete, onImageRemove
           </CardContent>
         </Card>
         <div className="flex items-center justify-center h-full">
+          <ScrollArea className="h-full max-h-[600px] w-full rounded-lg border shadow-2xl">
             <ImageSelectDialog onImageSelect={onUploadComplete} onImageRemove={onImageRemove} mediaFiles={mediaFiles}>
               <Image
                 src={media.src}
@@ -58,9 +60,10 @@ export default function SlideExperiment({ media, onUploadComplete, onImageRemove
                 width={media.width}
                 height={media.height}
                 data-ai-hint={media.hint}
-                className="rounded-lg shadow-2xl cursor-pointer"
+                className="w-full h-auto cursor-pointer"
               />
             </ImageSelectDialog>
+          </ScrollArea>
         </div>
       </div>
     </div>
