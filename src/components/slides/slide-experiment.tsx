@@ -22,9 +22,27 @@ interface SlideExperimentProps {
   onImageRemove: () => void;
   mediaFiles: string[];
   title?: string;
+  cardTitle?: string;
+  cardDescription?: string;
+  cardContent?: React.ReactNode;
 }
 
-export default function SlideExperiment({ media, onUploadComplete, onImageRemove, mediaFiles, title = "A Problem is Found" }: SlideExperimentProps) {
+export default function SlideExperiment({ 
+  media, 
+  onUploadComplete, 
+  onImageRemove, 
+  mediaFiles, 
+  title = "A Problem is Found",
+  cardTitle = "The Adventure Begins",
+  cardDescription = "A new collection element (`null-aware`) was added to Dart. The existing `if` and `for` collection elements were under a section called 'Operators' and not well-defined.",
+  cardContent = (
+    <>
+      <p>An engineer noted the `if` element supported `else`, which wasn't documented.</p>
+      <p>I prompted Gemini: <span className="font-mono bg-muted p-1 rounded-md text-sm">What does the signature for an 'if' conditional look like in a Dart collection?</span></p>
+      <p>The response was disorganized and never included an `else` example.</p>
+    </>
+  )
+}: SlideExperimentProps) {
   return (
     <div className="w-full text-center space-y-8">
       <h2 className="font-headline text-4xl md:text-5xl font-bold text-primary">
@@ -39,17 +57,15 @@ export default function SlideExperiment({ media, onUploadComplete, onImageRemove
             <div className="flex items-start gap-4">
                 <Beaker className="h-8 w-8 text-primary mt-1" />
                 <div>
-                    <CardTitle className="font-headline">The Adventure Begins</CardTitle>
+                    <CardTitle className="font-headline">{cardTitle}</CardTitle>
                     <CardDescription>
-                        A new collection element (`null-aware`) was added to Dart. The existing `if` and `for` collection elements were under a section called 'Operators' and not well-defined.
+                        {cardDescription}
                     </CardDescription>
                 </div>
             </div>
           </CardHeader>
           <CardContent className="space-y-2">
-            <p>An engineer noted the `if` element supported `else`, which wasn't documented.</p>
-            <p>I prompted Gemini: <span className="font-mono bg-muted p-1 rounded-md text-sm">What does the signature for an 'if' conditional look like in a Dart collection?</span></p>
-            <p>The response was disorganized and never included an `else` example.</p>
+            {cardContent}
           </CardContent>
         </Card>
         <div className="flex items-center justify-center h-full">

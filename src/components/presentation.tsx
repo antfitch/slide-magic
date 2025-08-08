@@ -28,7 +28,18 @@ const slides = [
   { component: SlideExperiment, key: 'experiment', props: { title: "A Problem is Found"} },
   { component: SlideExperiment2, key: 'experiment2', props: {} },
   { component: SlideRewriteDoc, key: 'rewrite', props: {} },
-  { component: SlideExperiment, key: 'experiment_duplicate', props: { title: "Three Weeks Later..." } },
+  { component: SlideExperiment, key: 'experiment_duplicate', props: { 
+      title: "Three Weeks Later...",
+      cardTitle: "The Adventure Continues",
+      cardDescription: "Did Gemini pick up the changes? Would I finally see `if else` in Gemini's results?",
+      cardContent: (
+        <>
+          <p>I prompted Gemini again with the same question I asked it before we made the change: <span className="font-mono bg-muted p-1 rounded-md text-sm">What does the signature for an 'if' conditional look like in a Dart collection?</span></p>
+          <p>The response contained 'if else', new examples, and was even more detailed than our updated docs.</p>
+        </>
+      )
+    } 
+  },
   { component: SlideAiDemo, key: 'demo', props: {} },
   { component: SlideResults, key: 'results', props: {} },
   { component: SlideResources, key: 'resources', props: {} },
