@@ -64,8 +64,8 @@ export default function SlideAiDemo({ onGenerate }: SlideAiDemoProps) {
             <CardDescription>The AI will generate a sample documentation excerpt here.</CardDescription>
           </CardHeader>
           <CardContent>
-            <ScrollArea className="h-full max-h-[360px] w-full rounded-lg border shadow-inner bg-muted">
-                <pre className="font-code text-sm p-4 whitespace-pre-wrap min-h-[150px]">
+            <ScrollArea className="h-full max-h-[360px] w-full rounded-lg border shadow-inner bg-muted p-4">
+                <pre className="font-code text-sm whitespace-pre-wrap min-h-[150px]">
                   {isLoading ? <span className="text-muted-foreground">Generating...</span> : generatedExcerpt || 'Generated content will appear here...'}
                 </pre>
             </ScrollArea>
