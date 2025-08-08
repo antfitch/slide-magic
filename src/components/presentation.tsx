@@ -72,7 +72,7 @@ export default function Presentation() {
     hint: 'writer code',
   });
   const [solutionMedia, setSolutionMedia] = useState({
-    src: 'https://storage.googleapis.com/project-spark-348216.appspot.com/static/5c1a8523-2384-4017-90a6-57b1207e4c27/_0.png',
+    src: 'https://storage.googleapis.com/project-spark-348216.appspot.com/static/f0926e5e-6a52-4364-92d5-45279b908489/_0.png',
     type: 'image/png',
     width: 600,
     height: 600,
@@ -106,15 +106,12 @@ export default function Presentation() {
     if (savedIntroMedia) {
         setIntroMedia(JSON.parse(savedIntroMedia));
     }
-    const savedSolutionMedia = localStorage.getItem('solutionMedia');
-    if (savedSolutionMedia) {
-        setSolutionMedia(JSON.parse(savedSolutionMedia));
-    }
   }, []);
 
   const handleIntroUploadComplete = (file: string, fileType: string) => {
     const newMedia = { ...introMedia, src: file, type: fileType };
     setIntroMedia(newMedia);
+    localStorage.setItem('introMedia', JSON.stringify(newMedia));
   };
 
   const handleSolutionUploadComplete = (file: string, fileType: string) => {
