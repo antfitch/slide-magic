@@ -22,8 +22,8 @@ interface SlideRankedProps {
   onImageRemove: () => void;
   mediaFiles: string[];
   title: string;
-  description: string;
-  rank: number;
+  description?: string;
+  rank?: number;
 }
 
 export default function SlideRanked({ 
@@ -38,25 +38,29 @@ export default function SlideRanked({
   return (
     <div className="w-full text-center space-y-8">
       <h2 className="font-headline text-4xl md:text-5xl font-bold text-primary">
-        How Gemini Ranks Content
+        {title}
       </h2>
-      <div className="grid md:grid-cols-2 gap-8 items-start text-left">
-        <Card className="h-full">
-          <CardHeader>
-            <div className="flex items-start gap-4">
-                <div className="relative">
-                    <Award className="h-10 w-10 text-amber-500 mt-1" />
-                    <span className="absolute inset-0 flex items-center justify-center font-bold text-white text-sm mt-1">{rank}</span>
-                </div>
-                <div>
-                    <CardTitle className="font-headline">{title}</CardTitle>
-                    <CardDescription>
-                        {description}
-                    </CardDescription>
-                </div>
-            </div>
-          </CardHeader>
-        </Card>
+      <div className={`grid ${description ? 'md:grid-cols-2' : 'md:grid-cols-1'} gap-8 items-start text-left`}>
+        {description && (
+          <Card className="h-full">
+            <CardHeader>
+              <div className="flex items-start gap-4">
+                  {rank && (
+                    <div className="relative">
+                        <Award className="h-10 w-10 text-amber-500 mt-1" />
+                        <span className="absolute inset-0 flex items-center justify-center font-bold text-white text-sm mt-1">{rank}</span>
+                    </div>
+                  )}
+                  <div>
+                      <CardTitle className="font-headline">{title}</CardTitle>
+                      <CardDescription>
+                          {description}
+                      </CardDescription>
+                  </div>
+              </div>
+            </CardHeader>
+          </Card>
+        )}
         <div className="flex items-center justify-center h-full">
           <ScrollArea className="h-full max-h-[360px] w-full rounded-lg border shadow-2xl">
             <ImageSelectDialog onImageSelect={onUploadComplete} onImageRemove={onImageRemove} mediaFiles={mediaFiles}>

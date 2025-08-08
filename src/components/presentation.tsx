@@ -68,6 +68,10 @@ const slides = [
       rank: 4
     }
   },
+  { component: SlideRanked, key: 'ranked-5', props: {
+      title: "5. Blogs & Stack Overflow",
+    }
+  },
   { component: SlideAiDemo, key: 'demo', props: {} },
   { component: SlideResources, key: 'resources', props: {} },
 ];
@@ -196,6 +200,15 @@ const initialRanked4Media = {
   alt: 'A screen with lines of code.',
   hint: 'code screen',
 };
+const initialRanked5Media = {
+  src: 'https://placehold.co/600x400.png',
+  type: 'image/png',
+  width: 600,
+  height: 400,
+  alt: 'A screen with lines of code.',
+  hint: 'blogs stackoverflow',
+};
+
 
 export default function Presentation({ mediaFiles }: PresentationProps) {
   const [currentSlide, setCurrentSlide] = useState(0);
@@ -210,6 +223,7 @@ export default function Presentation({ mediaFiles }: PresentationProps) {
   const [ranked2Media, setRanked2Media] = useState(initialRanked2Media);
   const [ranked3Media, setRanked3Media] = useState(initialRanked3Media);
   const [ranked4Media, setRanked4Media] = useState(initialRanked4Media);
+  const [ranked5Media, setRanked5Media] = useState(initialRanked5Media);
   const [colors, setColors] = useState<Colors>({
     primary: '243 82% 62%',
     accent: '26 100% 50%',
@@ -276,6 +290,10 @@ export default function Presentation({ mediaFiles }: PresentationProps) {
     const savedRanked4Src = localStorage.getItem('ranked4MediaSrc');
     if (savedRanked4Src) {
       setRanked4Media(prev => ({ ...prev, src: savedRanked4Src, type: `image/${savedRanked4Src.split('.').pop()}` }));
+    }
+    const savedRanked5Src = localStorage.getItem('ranked5MediaSrc');
+    if (savedRanked5Src) {
+      setRanked5Media(prev => ({ ...prev, src: savedRanked5Src, type: `image/${savedRanked5Src.split('.').pop()}` }));
     }
   }, []);
 
@@ -378,6 +396,15 @@ export default function Presentation({ mediaFiles }: PresentationProps) {
     localStorage.removeItem('ranked4MediaSrc');
   };
 
+  const handleRanked5UploadComplete = (file: string, fileType: string) => {
+    setRanked5Media({ ...ranked5Media, src: file, type: fileType });
+    localStorage.setItem('ranked5MediaSrc', file);
+  };
+  const handleRanked5ImageRemove = () => {
+    setRanked5Media(initialRanked5Media);
+    localStorage.removeItem('ranked5MediaSrc');
+  };
+
   const updateCssVariables = (newColors: Colors) => {
     document.documentElement.style.setProperty('--primary', newColors.primary);
     document.documentElement.style.setProperty('--accent', newColors.accent);
@@ -427,6 +454,7 @@ export default function Presentation({ mediaFiles }: PresentationProps) {
     'ranked-2': { media: ranked2Media, onUploadComplete: handleRanked2UploadComplete, onImageRemove: handleRanked2ImageRemove, mediaFiles: mediaFiles },
     'ranked-3': { media: ranked3Media, onUploadComplete: handleRanked3UploadComplete, onImageRemove: handleRanked3ImageRemove, mediaFiles: mediaFiles },
     'ranked-4': { media: ranked4Media, onUploadComplete: handleRanked4UploadComplete, onImageRemove: handleRanked4ImageRemove, mediaFiles: mediaFiles },
+    'ranked-5': { media: ranked5Media, onUploadComplete: handleRanked5UploadComplete, onImageRemove: handleRanked5ImageRemove, mediaFiles: mediaFiles },
   };
 
   const { component: CurrentSlideComponent, key: currentSlideKey, props: currentSlideGeneralProps } = slides[currentSlide];
