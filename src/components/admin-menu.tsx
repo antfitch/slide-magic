@@ -133,10 +133,10 @@ export function AdminMenu({ children, colors, onColorChange, font, onFontChange 
                                 <SelectValue placeholder="Select a font pair" />
                             </SelectTrigger>
                             <SelectContent>
-                                <SelectItem value="inter-space-grotesk">Sans Serif / Grotesk</SelectItem>
-                                <SelectItem value="roboto-slab-roboto">Slab / Sans Serif</SelectItem>
-                                <SelectItem value="lato-merriweather">Sans Serif / Serif</SelectItem>
-                                <SelectItem value="source-sans-pro-playfair-display">Sans Serif / Serif</SelectItem>
+                                <SelectItem value="inter-space-grotesk">Inter / Space Grotesk</SelectItem>
+                                <SelectItem value="roboto-slab-roboto">Roboto Slab / Roboto</SelectItem>
+                                <SelectItem value="lato-merriweather">Lato / Merriweather</SelectItem>
+                                <SelectItem value="source-sans-pro-playfair-display">Source Sans Pro / Playfair Display</SelectItem>
                             </SelectContent>
                         </Select>
                     </div>
