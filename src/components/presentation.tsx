@@ -78,7 +78,7 @@ export default function Presentation({ mediaFiles }: PresentationProps) {
     hint: 'writer code',
   });
   const [solutionMedia, setSolutionMedia] = useState({
-    src: 'https://storage.googleapis.com/project-spark-348216.appspot.com/static/476c818a-a639-4787-83d4-13653114f04d/_0.png',
+    src: 'https://placehold.co/600x600.png',
     type: 'image/png',
     width: 600,
     height: 600,
