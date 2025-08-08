@@ -21,13 +21,14 @@ interface SlideExperimentProps {
   onUploadComplete: (file: string, fileType: string) => void;
   onImageRemove: () => void;
   mediaFiles: string[];
+  title?: string;
 }
 
-export default function SlideExperiment({ media, onUploadComplete, onImageRemove, mediaFiles }: SlideExperimentProps) {
+export default function SlideExperiment({ media, onUploadComplete, onImageRemove, mediaFiles, title = "A Problem is Found" }: SlideExperimentProps) {
   return (
     <div className="w-full text-center space-y-8">
       <h2 className="font-headline text-4xl md:text-5xl font-bold text-primary">
-        A Problem is Found
+        {title}
       </h2>
       <p className="text-lg text-foreground/80 max-w-4xl mx-auto">
         Words are just words until they are backed up with data. I've conducted experiments to test the theory that Gemini tends to prioritize a product's vague documentation over other resources.

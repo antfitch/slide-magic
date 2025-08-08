@@ -21,17 +21,17 @@ import SlideResources from '@/components/slides/slide-resources';
 import { generateDocumentationExcerpt } from '@/ai/flows/generate-documentation-excerpt';
 
 const slides = [
-  { component: SlideTitle, key: 'title' },
-  { component: SlideIntro, key: 'intro' },
-  { component: SlideProblem, key: 'problem' },
-  { component: SlideSolution, key: 'solution' },
-  { component: SlideExperiment, key: 'experiment' },
-  { component: SlideExperiment2, key: 'experiment2' },
-  { component: SlideRewriteDoc, key: 'rewrite' },
-  { component: SlideExperiment, key: 'experiment_duplicate' },
-  { component: SlideAiDemo, key: 'demo' },
-  { component: SlideResults, key: 'results' },
-  { component: SlideResources, key: 'resources' },
+  { component: SlideTitle, key: 'title', props: {} },
+  { component: SlideIntro, key: 'intro', props: {} },
+  { component: SlideProblem, key: 'problem', props: {} },
+  { component: SlideSolution, key: 'solution', props: {} },
+  { component: SlideExperiment, key: 'experiment', props: { title: "A Problem is Found"} },
+  { component: SlideExperiment2, key: 'experiment2', props: {} },
+  { component: SlideRewriteDoc, key: 'rewrite', props: {} },
+  { component: SlideExperiment, key: 'experiment_duplicate', props: { title: "Three Weeks Later..." } },
+  { component: SlideAiDemo, key: 'demo', props: {} },
+  { component: SlideResults, key: 'results', props: {} },
+  { component: SlideResources, key: 'resources', props: {} },
 ];
 
 export interface Colors {
@@ -258,29 +258,27 @@ export default function Presentation({ mediaFiles }: PresentationProps) {
     updateFontStyles(newFonts);
   };
 
-  const slideComponents: { [key: string]: React.ReactNode } = {
-    'title': <SlideTitle />,
-    'intro': <SlideIntro media={introMedia} onUploadComplete={handleIntroUploadComplete} onImageRemove={handleIntroImageRemove} mediaFiles={mediaFiles} />,
-    'problem': <SlideProblem />,
-    'solution': <SlideSolution media={solutionMedia} onUploadComplete={handleSolutionUploadComplete} onImageRemove={handleSolutionImageRemove} mediaFiles={mediaFiles} />,
-    'experiment': <SlideExperiment media={experimentMedia} onUploadComplete={handleExperimentUploadComplete} onImageRemove={handleExperimentImageRemove} mediaFiles={mediaFiles} />,
-    'experiment2': <SlideExperiment2 media={experiment2Media} onUploadComplete={handleExperiment2UploadComplete} onImageRemove={handleExperiment2ImageRemove} mediaFiles={mediaFiles} />,
-    'rewrite': <SlideRewriteDoc 
-                  beforeMedia={rewriteBeforeMedia}
-                  afterMedia={rewriteAfterMedia}
-                  onBeforeUploadComplete={handleRewriteBeforeUploadComplete}
-                  onBeforeImageRemove={handleRewriteBeforeImageRemove}
-                  onAfterUploadComplete={handleRewriteAfterUploadComplete}
-                  onAfterImageRemove={handleRewriteAfterImageRemove}
-                  mediaFiles={mediaFiles}
-                />,
-    'experiment_duplicate': <SlideExperiment media={experimentMedia} onUploadComplete={handleExperimentUploadComplete} onImageRemove={handleExperimentImageRemove} mediaFiles={mediaFiles} />,
-    'demo': <SlideAiDemo onGenerate={generateDocumentationExcerpt} />,
-    'results': <SlideResults />,
-    'resources': <SlideResources />,
+  const slideSpecificProps: { [key: string]: any } = {
+    'intro': { media: introMedia, onUploadComplete: handleIntroUploadComplete, onImageRemove: handleIntroImageRemove, mediaFiles: mediaFiles },
+    'solution': { media: solutionMedia, onUploadComplete: handleSolutionUploadComplete, onImageRemove: handleSolutionImageRemove, mediaFiles: mediaFiles },
+    'experiment': { media: experimentMedia, onUploadComplete: handleExperimentUploadComplete, onImageRemove: handleExperimentImageRemove, mediaFiles: mediaFiles },
+    'experiment_duplicate': { media: experimentMedia, onUploadComplete: handleExperimentUploadComplete, onImageRemove: handleExperimentImageRemove, mediaFiles: mediaFiles },
+    'experiment2': { media: experiment2Media, onUploadComplete: handleExperiment2UploadComplete, onImageRemove: handleExperiment2ImageRemove, mediaFiles: mediaFiles },
+    'rewrite': { 
+      beforeMedia: rewriteBeforeMedia,
+      afterMedia: rewriteAfterMedia,
+      onBeforeUploadComplete: handleRewriteBeforeUploadComplete,
+      onBeforeImageRemove: handleRewriteBeforeImageRemove,
+      onAfterUploadComplete: handleRewriteAfterUploadComplete,
+      onAfterImageRemove: handleRewriteAfterImageRemove,
+      mediaFiles: mediaFiles
+    },
+    'demo': { onGenerate: generateDocumentationExcerpt },
   };
-  
-  const CurrentSlideComponent = slideComponents[slides[currentSlide].key as keyof typeof slideComponents];
+
+  const { component: CurrentSlideComponent, key: currentSlideKey, props: currentSlideGeneralProps } = slides[currentSlide];
+  const currentSlideSpecificProps = slideSpecificProps[currentSlideKey] || {};
+  const combinedProps = { ...currentSlideGeneralProps, ...currentSlideSpecificProps };
 
   const goToNextSlide = () => {
     setCurrentSlide((prev) => (prev === slides.length - 1 ? 0 : prev + 1));
@@ -337,7 +335,7 @@ export default function Presentation({ mediaFiles }: PresentationProps) {
           key={currentSlide}
           className="w-full h-full flex items-center justify-center animate-in fade-in-50 duration-500"
         >
-          {CurrentSlideComponent}
+          <CurrentSlideComponent {...combinedProps} />
         </div>
       </main>
 
@@ -366,5 +364,3 @@ export default function Presentation({ mediaFiles }: PresentationProps) {
     </div>
   );
 }
-
-    
