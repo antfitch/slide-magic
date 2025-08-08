@@ -15,8 +15,10 @@ import SlideSolution from '@/components/slides/slide-solution';
 import SlideExperiment from '@/components/slides/slide-experiment';
 import SlideExperiment2 from '@/components/slides/slide-experiment-2';
 import SlideRewriteDoc from '@/components/slides/slide-rewrite-doc';
-import SlideAiDemo from '@/components/slides/slide-ai-demo';
 import SlideResults from '@/components/slides/slide-results';
+import SlideAiDemo from '@/components/slides/slide-ai-demo';
+import SlideButWhy from '@/components/slides/slide-but-why';
+import SlideRanked from '@/components/slides/slide-ranked';
 import SlideResources from '@/components/slides/slide-resources';
 import { generateDocumentationExcerpt } from '@/ai/flows/generate-documentation-excerpt';
 
@@ -41,6 +43,31 @@ const slides = [
     } 
   },
   { component: SlideResults, key: 'results', props: {} },
+  { component: SlideButWhy, key: 'but-why', props: {} },
+  { component: SlideRanked, key: 'ranked-1', props: {
+      title: "1. Exact Prompts",
+      description: "Gemini prefers to answer with the information that is the most direct answer to a user's prompt. It wants to be helpful and to the point. It will choose a poorly written but direct answer over a well-written but indirect answer.",
+      rank: 1
+    }
+  },
+  { component: SlideRanked, key: 'ranked-2', props: {
+      title: "2. Product Documentation",
+      description: "The information in your product's documentation is given a high rank. It's considered an authoritative source. Ensure this content is accurate and up-to-date.",
+      rank: 2
+    }
+  },
+  { component: SlideRanked, key: 'ranked-3', props: {
+      title: "3. API Documentation",
+      description: "API documentation is also highly valued. It provides concrete, actionable information that the LLM can use to construct its answers.",
+      rank: 3
+    }
+  },
+  { component: SlideRanked, key: 'ranked-4', props: {
+      title: "4. Code",
+      description: "The code itself is a source of truth, but it's often less accessible to the LLM than well-structured documentation. It's used to verify and supplement information from other sources.",
+      rank: 4
+    }
+  },
   { component: SlideAiDemo, key: 'demo', props: {} },
   { component: SlideResources, key: 'resources', props: {} },
 ];
@@ -129,6 +156,46 @@ const initialRewriteAfterMedia = {
   alt: 'Clear documentation with syntax and examples.',
   hint: 'code clean',
 };
+const initialButWhyMedia = {
+  src: 'https://placehold.co/600x400.png',
+  type: 'image/png',
+  width: 600,
+  height: 400,
+  alt: 'An illustration of a brain with question marks.',
+  hint: 'brain questions',
+};
+const initialRanked1Media = {
+  src: 'https://placehold.co/600x400.png',
+  type: 'image/png',
+  width: 600,
+  height: 400,
+  alt: 'A target with an arrow in the bullseye.',
+  hint: 'target bullseye',
+};
+const initialRanked2Media = {
+  src: 'https://placehold.co/600x400.png',
+  type: 'image/png',
+  width: 600,
+  height: 400,
+  alt: 'A book with a product logo on it.',
+  hint: 'product book',
+};
+const initialRanked3Media = {
+  src: 'https://placehold.co/600x400.png',
+  type: 'image/png',
+  width: 600,
+  height: 400,
+  alt: 'A technical drawing of an API.',
+  hint: 'api diagram',
+};
+const initialRanked4Media = {
+  src: 'https://placehold.co/600x400.png',
+  type: 'image/png',
+  width: 600,
+  height: 400,
+  alt: 'A screen with lines of code.',
+  hint: 'code screen',
+};
 
 export default function Presentation({ mediaFiles }: PresentationProps) {
   const [currentSlide, setCurrentSlide] = useState(0);
@@ -138,6 +205,11 @@ export default function Presentation({ mediaFiles }: PresentationProps) {
   const [experiment2Media, setExperiment2Media] = useState(initialExperiment2Media);
   const [rewriteBeforeMedia, setRewriteBeforeMedia] = useState(initialRewriteBeforeMedia);
   const [rewriteAfterMedia, setRewriteAfterMedia] = useState(initialRewriteAfterMedia);
+  const [butWhyMedia, setButWhyMedia] = useState(initialButWhyMedia);
+  const [ranked1Media, setRanked1Media] = useState(initialRanked1Media);
+  const [ranked2Media, setRanked2Media] = useState(initialRanked2Media);
+  const [ranked3Media, setRanked3Media] = useState(initialRanked3Media);
+  const [ranked4Media, setRanked4Media] = useState(initialRanked4Media);
   const [colors, setColors] = useState<Colors>({
     primary: '243 82% 62%',
     accent: '26 100% 50%',
@@ -184,6 +256,26 @@ export default function Presentation({ mediaFiles }: PresentationProps) {
     const savedRewriteAfterSrc = localStorage.getItem('rewriteAfterMediaSrc');
     if (savedRewriteAfterSrc) {
       setRewriteAfterMedia(prev => ({ ...prev, src: savedRewriteAfterSrc, type: `image/${savedRewriteAfterSrc.split('.').pop()}` }));
+    }
+    const savedButWhySrc = localStorage.getItem('butWhyMediaSrc');
+    if (savedButWhySrc) {
+      setButWhyMedia(prev => ({ ...prev, src: savedButWhySrc, type: `image/${savedButWhySrc.split('.').pop()}` }));
+    }
+    const savedRanked1Src = localStorage.getItem('ranked1MediaSrc');
+    if (savedRanked1Src) {
+      setRanked1Media(prev => ({ ...prev, src: savedRanked1Src, type: `image/${savedRanked1Src.split('.').pop()}` }));
+    }
+    const savedRanked2Src = localStorage.getItem('ranked2MediaSrc');
+    if (savedRanked2Src) {
+      setRanked2Media(prev => ({ ...prev, src: savedRanked2Src, type: `image/${savedRanked2Src.split('.').pop()}` }));
+    }
+    const savedRanked3Src = localStorage.getItem('ranked3MediaSrc');
+    if (savedRanked3Src) {
+      setRanked3Media(prev => ({ ...prev, src: savedRanked3Src, type: `image/${savedRanked3Src.split('.').pop()}` }));
+    }
+    const savedRanked4Src = localStorage.getItem('ranked4MediaSrc');
+    if (savedRanked4Src) {
+      setRanked4Media(prev => ({ ...prev, src: savedRanked4Src, type: `image/${savedRanked4Src.split('.').pop()}` }));
     }
   }, []);
 
@@ -241,6 +333,51 @@ export default function Presentation({ mediaFiles }: PresentationProps) {
     localStorage.removeItem('rewriteAfterMediaSrc');
   };
 
+  const handleButWhyUploadComplete = (file: string, fileType: string) => {
+    setButWhyMedia({ ...butWhyMedia, src: file, type: fileType });
+    localStorage.setItem('butWhyMediaSrc', file);
+  };
+  const handleButWhyImageRemove = () => {
+    setButWhyMedia(initialButWhyMedia);
+    localStorage.removeItem('butWhyMediaSrc');
+  };
+
+  const handleRanked1UploadComplete = (file: string, fileType: string) => {
+    setRanked1Media({ ...ranked1Media, src: file, type: fileType });
+    localStorage.setItem('ranked1MediaSrc', file);
+  };
+  const handleRanked1ImageRemove = () => {
+    setRanked1Media(initialRanked1Media);
+    localStorage.removeItem('ranked1MediaSrc');
+  };
+
+  const handleRanked2UploadComplete = (file: string, fileType: string) => {
+    setRanked2Media({ ...ranked2Media, src: file, type: fileType });
+    localStorage.setItem('ranked2MediaSrc', file);
+  };
+  const handleRanked2ImageRemove = () => {
+    setRanked2Media(initialRanked2Media);
+    localStorage.removeItem('ranked2MediaSrc');
+  };
+
+  const handleRanked3UploadComplete = (file: string, fileType: string) => {
+    setRanked3Media({ ...ranked3Media, src: file, type: fileType });
+    localStorage.setItem('ranked3MediaSrc', file);
+  };
+  const handleRanked3ImageRemove = () => {
+    setRanked3Media(initialRanked3Media);
+    localStorage.removeItem('ranked3MediaSrc');
+  };
+
+  const handleRanked4UploadComplete = (file: string, fileType: string) => {
+    setRanked4Media({ ...ranked4Media, src: file, type: fileType });
+    localStorage.setItem('ranked4MediaSrc', file);
+  };
+  const handleRanked4ImageRemove = () => {
+    setRanked4Media(initialRanked4Media);
+    localStorage.removeItem('ranked4MediaSrc');
+  };
+
   const updateCssVariables = (newColors: Colors) => {
     document.documentElement.style.setProperty('--primary', newColors.primary);
     document.documentElement.style.setProperty('--accent', newColors.accent);
@@ -285,6 +422,11 @@ export default function Presentation({ mediaFiles }: PresentationProps) {
       mediaFiles: mediaFiles
     },
     'demo': { onGenerate: generateDocumentationExcerpt },
+    'but-why': { media: butWhyMedia, onUploadComplete: handleButWhyUploadComplete, onImageRemove: handleButWhyImageRemove, mediaFiles: mediaFiles },
+    'ranked-1': { media: ranked1Media, onUploadComplete: handleRanked1UploadComplete, onImageRemove: handleRanked1ImageRemove, mediaFiles: mediaFiles },
+    'ranked-2': { media: ranked2Media, onUploadComplete: handleRanked2UploadComplete, onImageRemove: handleRanked2ImageRemove, mediaFiles: mediaFiles },
+    'ranked-3': { media: ranked3Media, onUploadComplete: handleRanked3UploadComplete, onImageRemove: handleRanked3ImageRemove, mediaFiles: mediaFiles },
+    'ranked-4': { media: ranked4Media, onUploadComplete: handleRanked4UploadComplete, onImageRemove: handleRanked4ImageRemove, mediaFiles: mediaFiles },
   };
 
   const { component: CurrentSlideComponent, key: currentSlideKey, props: currentSlideGeneralProps } = slides[currentSlide];
