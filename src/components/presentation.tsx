@@ -28,6 +28,7 @@ const slides = [
   { component: SlideExperiment, key: 'experiment' },
   { component: SlideExperiment2, key: 'experiment2' },
   { component: SlideRewriteDoc, key: 'rewrite' },
+  { component: SlideExperiment, key: 'experiment_duplicate' },
   { component: SlideAiDemo, key: 'demo' },
   { component: SlideResults, key: 'results' },
   { component: SlideResources, key: 'resources' },
@@ -257,7 +258,7 @@ export default function Presentation({ mediaFiles }: PresentationProps) {
     updateFontStyles(newFonts);
   };
 
-  const slideComponents = {
+  const slideComponents: { [key: string]: React.ReactNode } = {
     'title': <SlideTitle />,
     'intro': <SlideIntro media={introMedia} onUploadComplete={handleIntroUploadComplete} onImageRemove={handleIntroImageRemove} mediaFiles={mediaFiles} />,
     'problem': <SlideProblem />,
@@ -273,6 +274,7 @@ export default function Presentation({ mediaFiles }: PresentationProps) {
                   onAfterImageRemove={handleRewriteAfterImageRemove}
                   mediaFiles={mediaFiles}
                 />,
+    'experiment_duplicate': <SlideExperiment media={experimentMedia} onUploadComplete={handleExperimentUploadComplete} onImageRemove={handleExperimentImageRemove} mediaFiles={mediaFiles} />,
     'demo': <SlideAiDemo onGenerate={generateDocumentationExcerpt} />,
     'results': <SlideResults />,
     'resources': <SlideResources />,
