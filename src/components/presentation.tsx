@@ -101,6 +101,22 @@ const initialExperiment2Media = {
   alt: 'A different image showing the investigation process',
   hint: 'detective board',
 };
+const initialRewriteBeforeMedia = {
+  src: 'https://placehold.co/400x500.png',
+  type: 'image/png',
+  width: 400,
+  height: 500,
+  alt: 'Vague and incomplete documentation example.',
+  hint: 'code messy',
+};
+const initialRewriteAfterMedia = {
+  src: 'https://placehold.co/400x500.png',
+  type: 'image/png',
+  width: 400,
+  height: 500,
+  alt: 'Clear documentation with syntax and examples.',
+  hint: 'code clean',
+};
 
 export default function Presentation({ mediaFiles }: PresentationProps) {
   const [currentSlide, setCurrentSlide] = useState(0);
@@ -108,6 +124,8 @@ export default function Presentation({ mediaFiles }: PresentationProps) {
   const [solutionMedia, setSolutionMedia] = useState(initialSolutionMedia);
   const [experimentMedia, setExperimentMedia] = useState(initialExperimentMedia);
   const [experiment2Media, setExperiment2Media] = useState(initialExperiment2Media);
+  const [rewriteBeforeMedia, setRewriteBeforeMedia] = useState(initialRewriteBeforeMedia);
+  const [rewriteAfterMedia, setRewriteAfterMedia] = useState(initialRewriteAfterMedia);
   const [colors, setColors] = useState<Colors>({
     primary: '243 82% 62%',
     accent: '26 100% 50%',
@@ -147,6 +165,14 @@ export default function Presentation({ mediaFiles }: PresentationProps) {
     if (savedExperiment2Src) {
         setExperiment2Media(prev => ({ ...prev, src: savedExperiment2Src, type: `image/${savedExperiment2Src.split('.').pop()}` }));
     }
+    const savedRewriteBeforeSrc = localStorage.getItem('rewriteBeforeMediaSrc');
+    if (savedRewriteBeforeSrc) {
+      setRewriteBeforeMedia(prev => ({ ...prev, src: savedRewriteBeforeSrc, type: `image/${savedRewriteBeforeSrc.split('.').pop()}` }));
+    }
+    const savedRewriteAfterSrc = localStorage.getItem('rewriteAfterMediaSrc');
+    if (savedRewriteAfterSrc) {
+      setRewriteAfterMedia(prev => ({ ...prev, src: savedRewriteAfterSrc, type: `image/${savedRewriteAfterSrc.split('.').pop()}` }));
+    }
   }, []);
 
   const handleIntroUploadComplete = (file: string, fileType: string) => {
@@ -185,6 +211,24 @@ export default function Presentation({ mediaFiles }: PresentationProps) {
     localStorage.removeItem('experiment2MediaSrc');
   };
 
+  const handleRewriteBeforeUploadComplete = (file: string, fileType: string) => {
+    setRewriteBeforeMedia({ ...rewriteBeforeMedia, src: file, type: fileType });
+    localStorage.setItem('rewriteBeforeMediaSrc', file);
+  };
+  const handleRewriteBeforeImageRemove = () => {
+    setRewriteBeforeMedia(initialRewriteBeforeMedia);
+    localStorage.removeItem('rewriteBeforeMediaSrc');
+  };
+
+  const handleRewriteAfterUploadComplete = (file: string, fileType: string) => {
+    setRewriteAfterMedia({ ...rewriteAfterMedia, src: file, type: fileType });
+    localStorage.setItem('rewriteAfterMediaSrc', file);
+  };
+  const handleRewriteAfterImageRemove = () => {
+    setRewriteAfterMedia(initialRewriteAfterMedia);
+    localStorage.removeItem('rewriteAfterMediaSrc');
+  };
+
   const updateCssVariables = (newColors: Colors) => {
     document.documentElement.style.setProperty('--primary', newColors.primary);
     document.documentElement.style.setProperty('--accent', newColors.accent);
@@ -220,7 +264,15 @@ export default function Presentation({ mediaFiles }: PresentationProps) {
     'solution': <SlideSolution media={solutionMedia} onUploadComplete={handleSolutionUploadComplete} onImageRemove={handleSolutionImageRemove} mediaFiles={mediaFiles} />,
     'experiment': <SlideExperiment media={experimentMedia} onUploadComplete={handleExperimentUploadComplete} onImageRemove={handleExperimentImageRemove} mediaFiles={mediaFiles} />,
     'experiment2': <SlideExperiment2 media={experiment2Media} onUploadComplete={handleExperiment2UploadComplete} onImageRemove={handleExperiment2ImageRemove} mediaFiles={mediaFiles} />,
-    'rewrite': <SlideRewriteDoc />,
+    'rewrite': <SlideRewriteDoc 
+                  beforeMedia={rewriteBeforeMedia}
+                  afterMedia={rewriteAfterMedia}
+                  onBeforeUploadComplete={handleRewriteBeforeUploadComplete}
+                  onBeforeImageRemove={handleRewriteBeforeImageRemove}
+                  onAfterUploadComplete={handleRewriteAfterUploadComplete}
+                  onAfterImageRemove={handleRewriteAfterImageRemove}
+                  mediaFiles={mediaFiles}
+                />,
     'demo': <SlideAiDemo onGenerate={generateDocumentationExcerpt} />,
     'results': <SlideResults />,
     'resources': <SlideResources />,
@@ -312,3 +364,5 @@ export default function Presentation({ mediaFiles }: PresentationProps) {
     </div>
   );
 }
+
+    
