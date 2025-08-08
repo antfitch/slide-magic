@@ -31,8 +31,59 @@ const slides = [
 
 export default function Presentation() {
   const [currentSlide, setCurrentSlide] = useState(0);
+  const [introMedia, setIntroMedia] = useState({
+    src: 'https://placehold.co/500x500.png',
+    type: 'image/png',
+    width: 500,
+    height: 500,
+    alt: 'A technical writer looking at a screen with code and documentation',
+    hint: 'writer code',
+  });
+  const [solutionMedia, setSolutionMedia] = useState({
+    src: 'https://placehold.co/600x400.png',
+    type: 'image/png',
+    width: 600,
+    height: 400,
+    alt: 'A seed growing into a large tree',
+    hint: 'seed tree',
+  });
 
-  const CurrentSlideComponent = slides[currentSlide].component;
+  useEffect(() => {
+    const savedIntroMedia = localStorage.getItem('introMedia');
+    if (savedIntroMedia) {
+      setIntroMedia(JSON.parse(savedIntroMedia));
+    }
+    const savedSolutionMedia = localStorage.getItem('solutionMedia');
+    if (savedSolutionMedia) {
+      setSolutionMedia(JSON.parse(savedSolutionMedia));
+    }
+  }, []);
+
+  const handleIntroUploadComplete = (file: string, fileType: string) => {
+    const newMedia = { ...introMedia, src: file, type: fileType };
+    setIntroMedia(newMedia);
+    localStorage.setItem('introMedia', JSON.stringify(newMedia));
+  };
+
+  const handleSolutionUploadComplete = (file: string, fileType: string) => {
+    const newMedia = { ...solutionMedia, src: file, type: fileType };
+    setSolutionMedia(newMedia);
+    localStorage.setItem('solutionMedia', JSON.stringify(newMedia));
+  };
+  
+  const slideComponents = {
+    'title': <SlideTitle />,
+    'intro': <SlideIntro media={introMedia} onUploadComplete={handleIntroUploadComplete} />,
+    'problem': <SlideProblem />,
+    'solution': <SlideSolution media={solutionMedia} onUploadComplete={handleSolutionUploadComplete} />,
+    'experiment': <SlideExperiment />,
+    'rewrite': <SlideRewriteDoc />,
+    'demo': <SlideAiDemo />,
+    'results': <SlideResults />,
+    'resources': <SlideResources />,
+  };
+  
+  const CurrentSlideComponent = slideComponents[slides[currentSlide].key as keyof typeof slideComponents];
 
   const goToNextSlide = () => {
     setCurrentSlide((prev) => (prev === slides.length - 1 ? 0 : prev + 1));
@@ -73,7 +124,7 @@ export default function Presentation() {
           key={currentSlide}
           className="w-full h-full flex items-center justify-center animate-in fade-in-50 duration-500"
         >
-          <CurrentSlideComponent />
+          {CurrentSlideComponent}
         </div>
       </main>
 

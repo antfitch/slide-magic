@@ -1,28 +1,26 @@
 
 "use client";
 
-import { useState } from 'react';
 import Image from 'next/image';
 import { Card, CardContent } from '@/components/ui/card';
 import UploadDialog from '@/components/upload-dialog';
 
-export default function SlideIntro() {
-  const [media, setMedia] = useState({
-    src: 'https://placehold.co/500x500.png',
-    type: 'image/png',
-    width: 500,
-    height: 500,
-    alt: 'A technical writer looking at a screen with code and documentation',
-    hint: 'writer code',
-  });
+interface Media {
+  src: string;
+  type: string;
+  width: number;
+  height: number;
+  alt: string;
+  hint: string;
+}
 
-  const handleUploadComplete = (file: string, fileType: string) => {
-    setMedia({
-      ...media,
-      src: file,
-      type: fileType,
-    });
-  };
+interface SlideIntroProps {
+  media: Media;
+  onUploadComplete: (file: string, fileType: string) => void;
+}
+
+
+export default function SlideIntro({ media, onUploadComplete }: SlideIntroProps) {
 
   return (
     <div className="grid md:grid-cols-2 gap-8 lg:gap-16 items-center w-full">
@@ -52,7 +50,7 @@ export default function SlideIntro() {
         </p>
       </div>
       <div className="flex items-center justify-center">
-        <UploadDialog onUploadComplete={handleUploadComplete}>
+        <UploadDialog onUploadComplete={onUploadComplete}>
           <Image
             src={media.src}
             alt={media.alt}

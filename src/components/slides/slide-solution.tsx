@@ -1,30 +1,27 @@
 
 "use client";
 
-import { useState } from 'react';
 import { Card, CardHeader, CardTitle } from '@/components/ui/card';
 import Image from 'next/image';
 import { Sparkles, FileText } from 'lucide-react';
 import UploadDialog from '@/components/upload-dialog';
 
-export default function SlideSolution() {
-  const [media, setMedia] = useState({
-    src: 'https://placehold.co/600x400.png',
-    type: 'image/png',
-    width: 600,
-    height: 400,
-    alt: 'A seed growing into a large tree',
-    hint: 'seed tree',
-  });
+interface Media {
+  src: string;
+  type: string;
+  width: number;
+  height: number;
+  alt: string;
+  hint: string;
+}
 
-  const handleUploadComplete = (file: string, fileType: string) => {
-    setMedia({
-      ...media,
-      src: file,
-      type: fileType,
-    });
-  };
+interface SlideSolutionProps {
+  media: Media;
+  onUploadComplete: (file: string, fileType: string) => void;
+}
 
+export default function SlideSolution({ media, onUploadComplete }: SlideSolutionProps) {
+  
   return (
     <div className="w-full text-center space-y-8">
       <h2 className="font-headline text-4xl md:text-5xl font-bold text-primary">
@@ -35,7 +32,7 @@ export default function SlideSolution() {
       </p>
 
       <div className="grid md:grid-cols-2 gap-8 items-center">
-        <UploadDialog onUploadComplete={handleUploadComplete}>
+        <UploadDialog onUploadComplete={onUploadComplete}>
           <Image
             src={media.src}
             alt={media.alt}
