@@ -6,6 +6,7 @@ import { ChevronLeft, ChevronRight } from 'lucide-react';
 
 import { Button } from '@/components/ui/button';
 import { Progress } from '@/components/ui/progress';
+import { ThemeToggle } from '@/components/theme-toggle';
 
 import SlideTitle from '@/components/slides/slide-title';
 import SlideIntro from '@/components/slides/slide-intro';
@@ -114,8 +115,9 @@ export default function Presentation() {
   return (
     <div className="flex flex-col h-full w-full bg-background items-center justify-center p-8 relative overflow-hidden">
       <header className="absolute top-0 left-0 right-0 p-4 md:p-8">
-        <div className="flex items-center justify-center max-w-5xl mx-auto">
+        <div className="flex items-center justify-between max-w-5xl mx-auto">
           <h1 className="text-2xl font-headline font-bold text-primary">DocuVision</h1>
+          <ThemeToggle />
         </div>
       </header>
 
