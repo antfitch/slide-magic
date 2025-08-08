@@ -205,8 +205,7 @@ export default function Presentation({ mediaFiles }: PresentationProps) {
         }
       `}</style>
       <header className="absolute top-0 left-0 right-0 p-4 md:p-8">
-        <div className="flex items-center justify-between max-w-5xl mx-auto">
-          <h1 className="text-2xl font-bold text-primary" style={{ fontFamily: 'var(--font-headline)' }}>DocuVision</h1>
+        <div className="flex items-center justify-end max-w-5xl mx-auto">
           <AdminMenu 
             colors={colors} 
             onColorChange={handleColorChange}
