@@ -27,7 +27,7 @@ export default function SlideExperiment({ media, onUploadComplete, onImageRemove
   return (
     <div className="w-full text-center space-y-8">
       <h2 className="font-headline text-4xl md:text-5xl font-bold text-primary">
-        The Experiment
+        A Problem is Found
       </h2>
       <p className="text-lg text-foreground/80 max-w-4xl mx-auto">
         Words are just words until they are backed up with data. I've conducted experiments to test the theory that Gemini tends to prioritize a product's vague documentation over other resources.
