@@ -1,9 +1,29 @@
 
+"use client";
+
+import { useState } from 'react';
 import Image from 'next/image';
 import { Card, CardContent } from '@/components/ui/card';
 import UploadDialog from '@/components/upload-dialog';
 
 export default function SlideIntro() {
+  const [media, setMedia] = useState({
+    src: 'https://placehold.co/500x500.png',
+    type: 'image/png',
+    width: 500,
+    height: 500,
+    alt: 'A technical writer looking at a screen with code and documentation',
+    hint: 'writer code',
+  });
+
+  const handleUploadComplete = (file: string, fileType: string) => {
+    setMedia({
+      ...media,
+      src: file,
+      type: fileType,
+    });
+  };
+
   return (
     <div className="grid md:grid-cols-2 gap-8 lg:gap-16 items-center w-full">
       <div className="space-y-4">
@@ -32,15 +52,25 @@ export default function SlideIntro() {
         </p>
       </div>
       <div className="flex items-center justify-center">
-        <UploadDialog>
-          <Image 
-            src="https://placehold.co/500x500.png"
-            alt="A technical writer looking at a screen with code and documentation"
-            width={500}
-            height={500}
-            data-ai-hint="writer code"
-            className="rounded-lg shadow-2xl cursor-pointer"
-          />
+        <UploadDialog onUploadComplete={handleUploadComplete}>
+          {media.type.startsWith('image/') ? (
+            <Image
+              src={media.src}
+              alt={media.alt}
+              width={media.width}
+              height={media.height}
+              data-ai-hint={media.hint}
+              className="rounded-lg shadow-2xl cursor-pointer"
+            />
+          ) : (
+            <video
+              src={media.src}
+              width={media.width}
+              height={media.height}
+              controls
+              className="rounded-lg shadow-2xl cursor-pointer"
+            />
+          )}
         </UploadDialog>
       </div>
     </div>

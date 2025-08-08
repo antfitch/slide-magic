@@ -1,10 +1,30 @@
 
-import { Card, CardContent, CardHeader, CardTitle } from '@/components/ui/card';
+"use client";
+
+import { useState } from 'react';
+import { Card, CardHeader, CardTitle } from '@/components/ui/card';
 import Image from 'next/image';
-import { Sparkles, Binary, FileText } from 'lucide-react';
+import { Sparkles, FileText } from 'lucide-react';
 import UploadDialog from '@/components/upload-dialog';
 
 export default function SlideSolution() {
+  const [media, setMedia] = useState({
+    src: 'https://placehold.co/600x400.png',
+    type: 'image/png',
+    width: 600,
+    height: 400,
+    alt: 'A seed growing into a large tree',
+    hint: 'seed tree',
+  });
+
+  const handleUploadComplete = (file: string, fileType: string) => {
+    setMedia({
+      ...media,
+      src: file,
+      type: fileType,
+    });
+  };
+
   return (
     <div className="w-full text-center space-y-8">
       <h2 className="font-headline text-4xl md:text-5xl font-bold text-primary">
@@ -15,15 +35,25 @@ export default function SlideSolution() {
       </p>
 
       <div className="grid md:grid-cols-2 gap-8 items-center">
-        <UploadDialog>
-          <Image
-            src="https://placehold.co/600x400.png"
-            alt="A seed growing into a large tree"
-            width={600}
-            height={400}
-            data-ai-hint="seed tree"
-            className="rounded-lg shadow-xl cursor-pointer"
-          />
+        <UploadDialog onUploadComplete={handleUploadComplete}>
+          {media.type.startsWith('image/') ? (
+            <Image
+              src={media.src}
+              alt={media.alt}
+              width={media.width}
+              height={media.height}
+              data-ai-hint={media.hint}
+              className="rounded-lg shadow-xl cursor-pointer"
+            />
+          ) : (
+            <video
+              src={media.src}
+              width={media.width}
+              height={media.height}
+              controls
+              className="rounded-lg shadow-2xl cursor-pointer"
+            />
+          )}
         </UploadDialog>
         <div className="space-y-4 text-left">
           <Card className="bg-destructive/5">

@@ -7,7 +7,8 @@ import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
 import { UploadCloud } from 'lucide-react';
 
-export default function UploadDialog({ children }: { children: React.ReactNode }) {
+export default function UploadDialog({ children, onUploadComplete }: { children: React.ReactNode, onUploadComplete: (file: string, fileType: string) => void }) {
+  const [isOpen, setIsOpen] = useState(false);
   const [file, setFile] = useState<string | null>(null);
   const [fileType, setFileType] = useState<string | null>(null);
 
@@ -28,11 +29,19 @@ export default function UploadDialog({ children }: { children: React.ReactNode }
       setFile(null);
       setFileType(null);
     }
+    setIsOpen(open);
+  };
+
+  const handleSubmit = () => {
+    if (file && fileType) {
+      onUploadComplete(file, fileType);
+      handleOpenChange(false);
+    }
   };
 
   return (
-    <Dialog onOpenChange={handleOpenChange}>
-      <DialogTrigger asChild>
+    <Dialog open={isOpen} onOpenChange={handleOpenChange}>
+      <DialogTrigger asChild onClick={() => setIsOpen(true)}>
         {children}
       </DialogTrigger>
       <DialogContent className="sm:max-w-[525px]">
@@ -48,7 +57,10 @@ export default function UploadDialog({ children }: { children: React.ReactNode }
               {fileType?.startsWith('video/') && (
                 <video src={file} controls className="max-h-80 rounded-lg" />
               )}
-              <Button onClick={() => { setFile(null); setFileType(null); }}>Upload Another</Button>
+              <div className="flex gap-2">
+                <Button variant="outline" onClick={() => { setFile(null); setFileType(null); }}>Upload Another</Button>
+                <Button onClick={handleSubmit}>Submit</Button>
+              </div>
             </div>
           ) : (
             <div className="flex flex-col items-center justify-center gap-4 p-8 border-2 border-dashed rounded-lg">
