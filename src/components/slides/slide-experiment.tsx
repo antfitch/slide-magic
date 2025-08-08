@@ -52,7 +52,7 @@ export default function SlideExperiment({ media, onUploadComplete, onImageRemove
           </CardContent>
         </Card>
         <div className="flex items-center justify-center h-full">
-          <ScrollArea className="h-full max-h-[600px] w-full rounded-lg border shadow-2xl">
+          <ScrollArea className="h-full max-h-[300px] w-full rounded-lg border shadow-2xl">
             <ImageSelectDialog onImageSelect={onUploadComplete} onImageRemove={onImageRemove} mediaFiles={mediaFiles}>
               <Image
                 src={media.src}
