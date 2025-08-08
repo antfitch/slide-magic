@@ -1,7 +1,27 @@
-import { Card, CardContent, CardHeader, CardTitle, CardDescription } from '@/components/ui/card';
-import { Beaker, BookOpen, Code, Search } from 'lucide-react';
 
-export default function SlideExperiment() {
+"use client";
+
+import Image from 'next/image';
+import { Card, CardContent, CardHeader, CardTitle, CardDescription } from '@/components/ui/card';
+import { Beaker } from 'lucide-react';
+import ImageSelectDialog from '@/components/image-select-dialog';
+
+interface Media {
+  src: string;
+  type: string;
+  width: number;
+  height: number;
+  alt: string;
+  hint: string;
+}
+
+interface SlideExperimentProps {
+  media: Media;
+  onUploadComplete: (file: string, fileType: string) => void;
+  mediaFiles: string[];
+}
+
+export default function SlideExperiment({ media, onUploadComplete, mediaFiles }: SlideExperimentProps) {
   return (
     <div className="w-full text-center space-y-8">
       <h2 className="font-headline text-4xl md:text-5xl font-bold text-primary">
@@ -29,30 +49,18 @@ export default function SlideExperiment() {
             <p>The response was disorganized and never included an `else` example.</p>
           </CardContent>
         </Card>
-        <Card className="h-full">
-          <CardHeader>
-             <div className="flex items-start gap-4">
-                <Search className="h-8 w-8 text-accent mt-1" />
-                <div>
-                    <CardTitle className="font-headline">The Investigation</CardTitle>
-                    <CardDescription>
-                       Why did Gemini fail to mention `else`? I was confused.
-                    </CardDescription>
-                </div>
-            </div>
-          </CardHeader>
-          <CardContent className="space-y-4">
-            <div className="flex gap-4">
-              <BookOpen className="h-5 w-5 text-muted-foreground mt-1" />
-              <p>The open-source specification for the feature documented the `else` case.</p>
-            </div>
-            <div className="flex gap-4">
-              <Code className="h-5 w-5 text-muted-foreground mt-1" />
-              <p>The code for the feature was also open source and should have been available to the LLM.</p>
-            </div>
-             <p className="font-semibold text-primary border-l-4 border-primary pl-4">The LLM applied heavy weight to our vague product documentation, ignoring other, more accurate sources.</p>
-          </CardContent>
-        </Card>
+        <div className="flex items-center justify-center h-full">
+            <ImageSelectDialog onImageSelect={onUploadComplete} mediaFiles={mediaFiles}>
+              <Image
+                src={media.src}
+                alt={media.alt}
+                width={media.width}
+                height={media.height}
+                data-ai-hint={media.hint}
+                className="rounded-lg shadow-2xl cursor-pointer"
+              />
+            </ImageSelectDialog>
+        </div>
       </div>
     </div>
   );

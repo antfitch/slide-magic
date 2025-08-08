@@ -87,6 +87,14 @@ export default function Presentation({ mediaFiles }: PresentationProps) {
     alt: 'Illustration comparing sick and healthy seeds growing into sick and healthy trees.',
     hint: 'seed tree',
   });
+  const [experimentMedia, setExperimentMedia] = useState({
+    src: 'https://placehold.co/500x500.png',
+    type: 'image/png',
+    width: 500,
+    height: 500,
+    alt: 'An image showing the investigation process',
+    hint: 'investigation board',
+  });
   const [colors, setColors] = useState<Colors>({
     primary: '243 82% 62%',
     accent: '26 100% 50%',
@@ -118,6 +126,10 @@ export default function Presentation({ mediaFiles }: PresentationProps) {
     if (savedSolutionSrc) {
         setSolutionMedia(prev => ({ ...prev, src: savedSolutionSrc, type: `image/${savedSolutionSrc.split('.').pop()}` }));
     }
+    const savedExperimentSrc = localStorage.getItem('experimentMediaSrc');
+    if (savedExperimentSrc) {
+        setExperimentMedia(prev => ({ ...prev, src: savedExperimentSrc, type: `image/${savedExperimentSrc.split('.').pop()}` }));
+    }
   }, []);
 
   const handleIntroUploadComplete = (file: string, fileType: string) => {
@@ -128,6 +140,11 @@ export default function Presentation({ mediaFiles }: PresentationProps) {
   const handleSolutionUploadComplete = (file: string, fileType: string) => {
     setSolutionMedia({ ...solutionMedia, src: file, type: fileType });
     localStorage.setItem('solutionMediaSrc', file);
+  };
+  
+  const handleExperimentUploadComplete = (file: string, fileType: string) => {
+    setExperimentMedia({ ...experimentMedia, src: file, type: fileType });
+    localStorage.setItem('experimentMediaSrc', file);
   };
 
   const updateCssVariables = (newColors: Colors) => {
@@ -163,7 +180,7 @@ export default function Presentation({ mediaFiles }: PresentationProps) {
     'intro': <SlideIntro media={introMedia} onUploadComplete={handleIntroUploadComplete} mediaFiles={mediaFiles} />,
     'problem': <SlideProblem />,
     'solution': <SlideSolution media={solutionMedia} onUploadComplete={handleSolutionUploadComplete} mediaFiles={mediaFiles} />,
-    'experiment': <SlideExperiment />,
+    'experiment': <SlideExperiment media={experimentMedia} onUploadComplete={handleExperimentUploadComplete} mediaFiles={mediaFiles} />,
     'experiment2': <SlideExperiment2 />,
     'rewrite': <SlideRewriteDoc />,
     'demo': <SlideAiDemo onGenerate={generateDocumentationExcerpt} />,
