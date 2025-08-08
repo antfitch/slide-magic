@@ -1,5 +1,7 @@
+
 import Image from 'next/image';
 import { Card, CardContent } from '@/components/ui/card';
+import UploadDialog from '@/components/upload-dialog';
 
 export default function SlideIntro() {
   return (
@@ -30,14 +32,16 @@ export default function SlideIntro() {
         </p>
       </div>
       <div className="flex items-center justify-center">
-        <Image 
-          src="https://placehold.co/500x500.png"
-          alt="A technical writer looking at a screen with code and documentation"
-          width={500}
-          height={500}
-          data-ai-hint="writer code"
-          className="rounded-lg shadow-2xl"
-        />
+        <UploadDialog>
+          <Image 
+            src="https://placehold.co/500x500.png"
+            alt="A technical writer looking at a screen with code and documentation"
+            width={500}
+            height={500}
+            data-ai-hint="writer code"
+            className="rounded-lg shadow-2xl cursor-pointer"
+          />
+        </UploadDialog>
       </div>
     </div>
   );

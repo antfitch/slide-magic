@@ -1,6 +1,8 @@
+
 import { Card, CardContent, CardHeader, CardTitle } from '@/components/ui/card';
 import Image from 'next/image';
 import { Sparkles, Binary, FileText } from 'lucide-react';
+import UploadDialog from '@/components/upload-dialog';
 
 export default function SlideSolution() {
   return (
@@ -9,18 +11,20 @@ export default function SlideSolution() {
         Good Seeds Grow Quality Trees
       </h2>
       <p className="text-lg text-foreground/80 max-w-4xl mx-auto">
-        An LLM assigns weights to information, prioritizing sources it deems most reliable. Your product's documentation is typically given significant weight, making it a vital "seed" an LLM uses to generate answers.
+        An LLM assigns weights to information, prioritizing sources it deems most reliable. Crucially, your product's documentation is typically given significant weight, often more than external sources, even if those sources are accurate. This makes your documentation a vital "seed" an LLM uses to generate answers.
       </p>
 
       <div className="grid md:grid-cols-2 gap-8 items-center">
-        <Image
-          src="https://placehold.co/600x400.png"
-          alt="A seed growing into a large tree"
-          width={600}
-          height={400}
-          data-ai-hint="seed tree"
-          className="rounded-lg shadow-xl"
-        />
+        <UploadDialog>
+          <Image
+            src="https://placehold.co/600x400.png"
+            alt="A seed growing into a large tree"
+            width={600}
+            height={400}
+            data-ai-hint="seed tree"
+            className="rounded-lg shadow-xl cursor-pointer"
+          />
+        </UploadDialog>
         <div className="space-y-4 text-left">
           <Card className="bg-destructive/5">
             <CardHeader className="flex flex-row items-center gap-4">
