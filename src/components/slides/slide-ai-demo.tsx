@@ -7,6 +7,7 @@ import { Textarea } from '@/components/ui/textarea';
 import { Button } from '@/components/ui/button';
 import { Loader } from 'lucide-react';
 import type { GenerateDocumentationExcerptInput, GenerateDocumentationExcerptOutput } from '@/ai/flows/generate-documentation-excerpt';
+import { ScrollArea } from '@/components/ui/scroll-area';
 
 interface SlideAiDemoProps {
   onGenerate: (input: GenerateDocumentationExcerptInput) => Promise<GenerateDocumentationExcerptOutput>;
@@ -63,9 +64,11 @@ export default function SlideAiDemo({ onGenerate }: SlideAiDemoProps) {
             <CardDescription>The AI will generate a sample documentation excerpt here.</CardDescription>
           </CardHeader>
           <CardContent>
-            <pre className="font-code text-sm bg-muted p-4 rounded-md whitespace-pre-wrap min-h-[150px]">
-              {isLoading ? <span className="text-muted-foreground">Generating...</span> : generatedExcerpt}
-            </pre>
+            <ScrollArea className="h-full max-h-[360px] w-full rounded-lg border shadow-inner bg-muted">
+                <pre className="font-code text-sm p-4 whitespace-pre-wrap min-h-[150px]">
+                  {isLoading ? <span className="text-muted-foreground">Generating...</span> : generatedExcerpt || 'Generated content will appear here...'}
+                </pre>
+            </ScrollArea>
           </CardContent>
         </Card>
       </div>
