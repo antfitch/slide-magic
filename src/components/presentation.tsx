@@ -93,12 +93,21 @@ const initialExperimentMedia = {
   alt: 'An image showing the investigation process',
   hint: 'investigation board',
 };
+const initialExperiment2Media = {
+  src: 'https://placehold.co/500x500.png',
+  type: 'image/png',
+  width: 500,
+  height: 500,
+  alt: 'A different image showing the investigation process',
+  hint: 'detective board',
+};
 
 export default function Presentation({ mediaFiles }: PresentationProps) {
   const [currentSlide, setCurrentSlide] = useState(0);
   const [introMedia, setIntroMedia] = useState(initialIntroMedia);
   const [solutionMedia, setSolutionMedia] = useState(initialSolutionMedia);
   const [experimentMedia, setExperimentMedia] = useState(initialExperimentMedia);
+  const [experiment2Media, setExperiment2Media] = useState(initialExperiment2Media);
   const [colors, setColors] = useState<Colors>({
     primary: '243 82% 62%',
     accent: '26 100% 50%',
@@ -134,6 +143,10 @@ export default function Presentation({ mediaFiles }: PresentationProps) {
     if (savedExperimentSrc) {
         setExperimentMedia(prev => ({ ...prev, src: savedExperimentSrc, type: `image/${savedExperimentSrc.split('.').pop()}` }));
     }
+    const savedExperiment2Src = localStorage.getItem('experiment2MediaSrc');
+    if (savedExperiment2Src) {
+        setExperiment2Media(prev => ({ ...prev, src: savedExperiment2Src, type: `image/${savedExperiment2Src.split('.').pop()}` }));
+    }
   }, []);
 
   const handleIntroUploadComplete = (file: string, fileType: string) => {
@@ -161,6 +174,15 @@ export default function Presentation({ mediaFiles }: PresentationProps) {
   const handleExperimentImageRemove = () => {
     setExperimentMedia(initialExperimentMedia);
     localStorage.removeItem('experimentMediaSrc');
+  };
+
+  const handleExperiment2UploadComplete = (file: string, fileType: string) => {
+    setExperiment2Media({ ...experiment2Media, src: file, type: fileType });
+    localStorage.setItem('experiment2MediaSrc', file);
+  };
+  const handleExperiment2ImageRemove = () => {
+    setExperiment2Media(initialExperiment2Media);
+    localStorage.removeItem('experiment2MediaSrc');
   };
 
   const updateCssVariables = (newColors: Colors) => {
@@ -197,7 +219,7 @@ export default function Presentation({ mediaFiles }: PresentationProps) {
     'problem': <SlideProblem />,
     'solution': <SlideSolution media={solutionMedia} onUploadComplete={handleSolutionUploadComplete} onImageRemove={handleSolutionImageRemove} mediaFiles={mediaFiles} />,
     'experiment': <SlideExperiment media={experimentMedia} onUploadComplete={handleExperimentUploadComplete} onImageRemove={handleExperimentImageRemove} mediaFiles={mediaFiles} />,
-    'experiment2': <SlideExperiment2 />,
+    'experiment2': <SlideExperiment2 media={experiment2Media} onUploadComplete={handleExperiment2UploadComplete} onImageRemove={handleExperiment2ImageRemove} mediaFiles={mediaFiles} />,
     'rewrite': <SlideRewriteDoc />,
     'demo': <SlideAiDemo onGenerate={generateDocumentationExcerpt} />,
     'results': <SlideResults />,
