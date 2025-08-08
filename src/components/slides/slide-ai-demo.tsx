@@ -45,14 +45,14 @@ export default function SlideAiDemo({ onGenerate }: SlideAiDemoProps) {
           <CardHeader>
             <CardTitle className="font-headline">Product Description</CardTitle>
           </CardHeader>
-          <CardContent className="space-y-4 flex-grow">
+          <CardContent className="space-y-4 flex-grow flex flex-col">
             <Textarea
               value={productDescription}
               onChange={(e) => setProductDescription(e.target.value)}
               placeholder="Describe your product here..."
-              className="min-h-[150px] font-code text-sm h-full"
+              className="min-h-[150px] font-code text-sm flex-grow"
             />
-             <Button onClick={handleGenerate} disabled={isLoading}>
+             <Button onClick={handleGenerate} disabled={isLoading} className="mt-4">
               {isLoading ? <Loader className="animate-spin mr-2" /> : null}
               {isLoading ? 'Generating...' : 'Generate Excerpt'}
             </Button>
@@ -64,8 +64,8 @@ export default function SlideAiDemo({ onGenerate }: SlideAiDemoProps) {
             <CardDescription>The AI will generate a sample documentation excerpt here.</CardDescription>
           </CardHeader>
           <CardContent className="flex-grow flex flex-col">
-            <ScrollArea className="h-full max-h-[288px] w-full rounded-lg border shadow-inner bg-muted p-4">
-                <pre className="font-code text-sm whitespace-pre-wrap">
+            <ScrollArea className="h-full max-h-[288px] w-full rounded-lg border shadow-inner bg-muted">
+                <pre className="font-code text-sm whitespace-pre-wrap p-4">
                   {isLoading ? <span className="text-muted-foreground">Generating...</span> : generatedExcerpt || 'Generated content will appear here...'}
                 </pre>
             </ScrollArea>
