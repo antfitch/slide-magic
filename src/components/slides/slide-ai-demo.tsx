@@ -1,5 +1,6 @@
+
 import { Card, CardContent, CardDescription, CardHeader, CardTitle } from '@/components/ui/card';
-import { ArrowRight, Sparkles, CheckCircle, XCircle } from 'lucide-react';
+import { ArrowRight, CheckCircle, XCircle } from 'lucide-react';
 
 export default function SlideAiDemo() {
   const beforeDoc = `collectionElement:
@@ -56,9 +57,8 @@ if (isSummer) ...?sandals`;
         </Card>
       </div>
 
-       <h3 className="font-headline text-3xl font-bold pt-8">The Results Were Good</h3>
-      <p className="text-lg text-foreground/80 max-w-4xl mx-auto">
-        Three weeks later, I re-ran the same prompt. Gemini 2.0's answers were much better. It included the `else` part, provided samples for lists, sets, and maps, and used the more precise terminology from the new documentation.
+       <p className="text-lg text-foreground/80 max-w-4xl mx-auto pt-8">
+        Three weeks later, I re-ran the same prompt. The answers were much better.
       </p>
 
     </div>
