@@ -56,7 +56,8 @@ const fontOptions = [
 ];
 
 function getFontUrl(fonts: Fonts) {
-  const familyParams = Object.values(fonts)
+  const uniqueFonts = [...new Set(Object.values(fonts))];
+  const familyParams = uniqueFonts
     .map(font => `family=${font.replace(/ /g, '+')}:wght@400;500;600;700`)
     .join('&');
   return `https://fonts.googleapis.com/css2?${familyParams}&display=swap`;
@@ -107,14 +108,24 @@ export default function Presentation({ mediaFiles }: PresentationProps) {
         setFonts(parsedFonts);
         updateFontStyles(parsedFonts);
     }
+    const savedIntroSrc = localStorage.getItem('introMediaSrc');
+    if (savedIntroSrc) {
+        setIntroMedia(prev => ({ ...prev, src: savedIntroSrc, type: `image/${savedIntroSrc.split('.').pop()}` }));
+    }
+    const savedSolutionSrc = localStorage.getItem('solutionMediaSrc');
+    if (savedSolutionSrc) {
+        setSolutionMedia(prev => ({ ...prev, src: savedSolutionSrc, type: `image/${savedSolutionSrc.split('.').pop()}` }));
+    }
   }, []);
 
   const handleIntroUploadComplete = (file: string, fileType: string) => {
     setIntroMedia({ ...introMedia, src: file, type: fileType });
+    localStorage.setItem('introMediaSrc', file);
   };
 
   const handleSolutionUploadComplete = (file: string, fileType: string) => {
     setSolutionMedia({ ...solutionMedia, src: file, type: fileType });
+    localStorage.setItem('solutionMediaSrc', file);
   };
 
   const updateCssVariables = (newColors: Colors) => {
@@ -187,6 +198,12 @@ export default function Presentation({ mediaFiles }: PresentationProps) {
 
   return (
     <div className={`flex flex-col h-full w-full bg-background items-center justify-center p-8 relative overflow-hidden`}>
+      <style jsx global>{`
+        :root {
+          --font-headline: "${fonts.headline}", sans-serif;
+          --font-body: "${fonts.body}", sans-serif;
+        }
+      `}</style>
       <header className="absolute top-0 left-0 right-0 p-4 md:p-8">
         <div className="flex items-center justify-between max-w-5xl mx-auto">
           <h1 className="text-2xl font-bold text-primary" style={{ fontFamily: 'var(--font-headline)' }}>DocuVision</h1>
