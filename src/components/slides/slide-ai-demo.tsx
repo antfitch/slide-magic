@@ -1,41 +1,71 @@
 
-import { Card, CardContent, CardDescription, CardHeader, CardTitle } from '@/components/ui/card';
+"use client";
 
-export default function SlideAiDemo() {
-  const prompt = `What does the signature for an 'if' conditional look like in a Dart collection?`;
-  const response = `if-case-element ::=
-  'if'
-  '('
-  expression
-  ')'
-  element
-  ('else'
-  element)?`;
+import { useState } from 'react';
+import { Card, CardContent, CardDescription, CardHeader, CardTitle } from '@/components/ui/card';
+import { Textarea } from '@/components/ui/textarea';
+import { Button } from '@/components/ui/button';
+import { Loader } from 'lucide-react';
+import type { GenerateDocumentationExcerptInput, GenerateDocumentationExcerptOutput } from '@/ai/flows/generate-documentation-excerpt';
+
+interface SlideAiDemoProps {
+  onGenerate: (input: GenerateDocumentationExcerptInput) => Promise<GenerateDocumentationExcerptOutput>;
+}
+
+export default function SlideAiDemo({ onGenerate }: SlideAiDemoProps) {
+  const [productDescription, setProductDescription] = useState('A new collection element (`null-aware`) was added to Dart. The existing `if` and `for` collection elements were under a section called \'Operators\' and not well-defined.');
+  const [generatedExcerpt, setGeneratedExcerpt] = useState('');
+  const [isLoading, setIsLoading] = useState(false);
+
+  const handleGenerate = async () => {
+    setIsLoading(true);
+    setGeneratedExcerpt('');
+    try {
+      const result = await onGenerate({ productDescription });
+      setGeneratedExcerpt(result.documentationExcerpt);
+    } catch (error) {
+      console.error('Error generating documentation excerpt:', error);
+      setGeneratedExcerpt('Sorry, something went wrong. Please try again.');
+    }
+    setIsLoading(false);
+  };
 
   return (
     <div className="w-full text-center space-y-8">
       <h2 className="font-headline text-4xl md:text-5xl font-bold text-primary">
-        Three Weeks Later...
+        AI-Powered Documentation
       </h2>
       <p className="text-lg text-foreground/80 max-w-4xl mx-auto">
-        I re-ran the same prompt to see if the answers improved with better documentation. The results were much better.
+        Now, let's see how our documentation improvements can empower an AI to generate helpful content. Enter a product description below and see how the AI generates a documentation excerpt.
       </p>
       
       <div className="grid md:grid-cols-2 gap-4 items-stretch">
         <Card className="text-left">
           <CardHeader>
-            <CardTitle className="font-headline">The Prompt</CardTitle>
+            <CardTitle className="font-headline">Product Description</CardTitle>
           </CardHeader>
-          <CardContent>
-            <pre className="font-code text-sm bg-muted p-4 rounded-md whitespace-pre-wrap">{prompt}</pre>
+          <CardContent className="space-y-4">
+            <Textarea
+              value={productDescription}
+              onChange={(e) => setProductDescription(e.target.value)}
+              placeholder="Describe your product here..."
+              className="min-h-[150px] font-code text-sm"
+            />
+            <Button onClick={handleGenerate} disabled={isLoading}>
+              {isLoading ? <Loader className="animate-spin mr-2" /> : null}
+              {isLoading ? 'Generating...' : 'Generate Excerpt'}
+            </Button>
           </CardContent>
         </Card>
         <Card className="text-left">
           <CardHeader>
-            <CardTitle className="font-headline">The Response</CardTitle>
+            <CardTitle className="font-headline">Generated Excerpt</CardTitle>
+            <CardDescription>The AI will generate a sample documentation excerpt here.</CardDescription>
           </CardHeader>
           <CardContent>
-            <pre className="font-code text-sm bg-muted p-4 rounded-md whitespace-pre-wrap">{response}</pre>
+            <pre className="font-code text-sm bg-muted p-4 rounded-md whitespace-pre-wrap min-h-[150px]">
+              {isLoading ? <span className="text-muted-foreground">Generating...</span> : generatedExcerpt}
+            </pre>
           </CardContent>
         </Card>
       </div>

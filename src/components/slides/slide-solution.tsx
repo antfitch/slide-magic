@@ -4,7 +4,7 @@
 import { Card, CardHeader, CardTitle } from '@/components/ui/card';
 import Image from 'next/image';
 import { Sparkles, FileText } from 'lucide-react';
-import UploadDialog from '@/components/upload-dialog';
+import ImageSelectDialog from '@/components/image-select-dialog';
 
 interface Media {
   src: string;
@@ -18,9 +18,10 @@ interface Media {
 interface SlideSolutionProps {
   media: Media;
   onUploadComplete: (file: string, fileType: string) => void;
+  mediaFiles: string[];
 }
 
-export default function SlideSolution({ media, onUploadComplete }: SlideSolutionProps) {
+export default function SlideSolution({ media, onUploadComplete, mediaFiles }: SlideSolutionProps) {
   
   return (
     <div className="w-full text-center space-y-8">
@@ -32,7 +33,7 @@ export default function SlideSolution({ media, onUploadComplete }: SlideSolution
       </p>
 
       <div className="grid md:grid-cols-2 gap-8 items-center">
-        <UploadDialog onUploadComplete={onUploadComplete}>
+        <ImageSelectDialog onImageSelect={onUploadComplete} mediaFiles={mediaFiles}>
           <Image
             src={media.src}
             alt={media.alt}
@@ -41,7 +42,7 @@ export default function SlideSolution({ media, onUploadComplete }: SlideSolution
             data-ai-hint={media.hint}
             className="rounded-lg shadow-xl cursor-pointer"
           />
-        </UploadDialog>
+        </ImageSelectDialog>
         <div className="space-y-4 text-left">
           <Card className="bg-destructive/5">
             <CardHeader className="flex flex-row items-center gap-4">

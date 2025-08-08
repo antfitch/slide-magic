@@ -3,7 +3,7 @@
 
 import Image from 'next/image';
 import { Card, CardContent } from '@/components/ui/card';
-import UploadDialog from '@/components/upload-dialog';
+import ImageSelectDialog from '@/components/image-select-dialog';
 
 interface Media {
   src: string;
@@ -17,10 +17,11 @@ interface Media {
 interface SlideIntroProps {
   media: Media;
   onUploadComplete: (file: string, fileType: string) => void;
+  mediaFiles: string[];
 }
 
 
-export default function SlideIntro({ media, onUploadComplete }: SlideIntroProps) {
+export default function SlideIntro({ media, onUploadComplete, mediaFiles }: SlideIntroProps) {
 
   return (
     <div className="grid md:grid-cols-2 gap-8 lg:gap-16 items-center w-full">
@@ -50,7 +51,7 @@ export default function SlideIntro({ media, onUploadComplete }: SlideIntroProps)
         </p>
       </div>
       <div className="flex items-center justify-center">
-        <UploadDialog onUploadComplete={onUploadComplete}>
+        <ImageSelectDialog onImageSelect={onUploadComplete} mediaFiles={mediaFiles}>
           <Image
             src={media.src}
             alt={media.alt}
@@ -59,7 +60,7 @@ export default function SlideIntro({ media, onUploadComplete }: SlideIntroProps)
             data-ai-hint={media.hint}
             className="rounded-lg shadow-2xl cursor-pointer"
           />
-        </UploadDialog>
+        </ImageSelectDialog>
       </div>
     </div>
   );

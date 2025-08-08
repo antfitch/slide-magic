@@ -17,6 +17,7 @@ import SlideRewriteDoc from '@/components/slides/slide-rewrite-doc';
 import SlideAiDemo from '@/components/slides/slide-ai-demo';
 import SlideResults from '@/components/slides/slide-results';
 import SlideResources from '@/components/slides/slide-resources';
+import { generateDocumentationExcerpt } from '@/ai/flows/generate-documentation-excerpt';
 
 const slides = [
   { component: SlideTitle, key: 'title' },
@@ -61,7 +62,11 @@ function getFontUrl(fonts: Fonts) {
   return `https://fonts.googleapis.com/css2?${familyParams}&display=swap`;
 }
 
-export default function Presentation() {
+interface PresentationProps {
+    mediaFiles: string[];
+}
+
+export default function Presentation({ mediaFiles }: PresentationProps) {
   const [currentSlide, setCurrentSlide] = useState(0);
   const [introMedia, setIntroMedia] = useState({
     src: 'https://placehold.co/500x500.png',
@@ -105,13 +110,11 @@ export default function Presentation() {
   }, []);
 
   const handleIntroUploadComplete = (file: string, fileType: string) => {
-    const newMedia = { ...introMedia, src: file, type: fileType };
-    setIntroMedia(newMedia);
+    setIntroMedia({ ...introMedia, src: file, type: fileType });
   };
 
   const handleSolutionUploadComplete = (file: string, fileType: string) => {
-    const newMedia = { ...solutionMedia, src: file, type: fileType };
-    setSolutionMedia(newMedia);
+    setSolutionMedia({ ...solutionMedia, src: file, type: fileType });
   };
 
   const updateCssVariables = (newColors: Colors) => {
@@ -144,12 +147,12 @@ export default function Presentation() {
 
   const slideComponents = {
     'title': <SlideTitle />,
-    'intro': <SlideIntro media={introMedia} onUploadComplete={handleIntroUploadComplete} />,
+    'intro': <SlideIntro media={introMedia} onUploadComplete={handleIntroUploadComplete} mediaFiles={mediaFiles} />,
     'problem': <SlideProblem />,
-    'solution': <SlideSolution media={solutionMedia} onUploadComplete={handleSolutionUploadComplete} />,
+    'solution': <SlideSolution media={solutionMedia} onUploadComplete={handleSolutionUploadComplete} mediaFiles={mediaFiles} />,
     'experiment': <SlideExperiment />,
     'rewrite': <SlideRewriteDoc />,
-    'demo': <SlideAiDemo />,
+    'demo': <SlideAiDemo onGenerate={generateDocumentationExcerpt} />,
     'results': <SlideResults />,
     'resources': <SlideResources />,
   };
