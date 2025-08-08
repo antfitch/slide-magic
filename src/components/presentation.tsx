@@ -72,11 +72,11 @@ export default function Presentation() {
     hint: 'writer code',
   });
   const [solutionMedia, setSolutionMedia] = useState({
-    src: 'https://placehold.co/600x400.png',
+    src: 'https://storage.googleapis.com/project-spark-348216.appspot.com/static/5c1a8523-2384-4017-90a6-57b1207e4c27/_0.png',
     type: 'image/png',
     width: 600,
-    height: 400,
-    alt: 'A seed growing into a large tree',
+    height: 600,
+    alt: 'Illustration comparing sick and healthy seeds growing into sick and healthy trees.',
     hint: 'seed tree',
   });
   const [colors, setColors] = useState<Colors>({
@@ -101,6 +101,14 @@ export default function Presentation() {
         const parsedFonts = JSON.parse(savedFonts);
         setFonts(parsedFonts);
         updateFontStyles(parsedFonts);
+    }
+    const savedIntroMedia = localStorage.getItem('introMedia');
+    if (savedIntroMedia) {
+        setIntroMedia(JSON.parse(savedIntroMedia));
+    }
+    const savedSolutionMedia = localStorage.getItem('solutionMedia');
+    if (savedSolutionMedia) {
+        setSolutionMedia(JSON.parse(savedSolutionMedia));
     }
   }, []);
 
