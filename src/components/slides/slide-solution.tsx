@@ -36,24 +36,14 @@ export default function SlideSolution() {
 
       <div className="grid md:grid-cols-2 gap-8 items-center">
         <UploadDialog onUploadComplete={handleUploadComplete}>
-          {media.type.startsWith('image/') ? (
-            <Image
-              src={media.src}
-              alt={media.alt}
-              width={media.width}
-              height={media.height}
-              data-ai-hint={media.hint}
-              className="rounded-lg shadow-xl cursor-pointer"
-            />
-          ) : (
-            <video
-              src={media.src}
-              width={media.width}
-              height={media.height}
-              controls
-              className="rounded-lg shadow-2xl cursor-pointer"
-            />
-          )}
+          <Image
+            src={media.src}
+            alt={media.alt}
+            width={media.width}
+            height={media.height}
+            data-ai-hint={media.hint}
+            className="rounded-lg shadow-xl cursor-pointer"
+          />
         </UploadDialog>
         <div className="space-y-4 text-left">
           <Card className="bg-destructive/5">

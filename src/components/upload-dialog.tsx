@@ -14,7 +14,7 @@ export default function UploadDialog({ children, onUploadComplete }: { children:
 
   const handleFileChange = (event: React.ChangeEvent<HTMLInputElement>) => {
     const selectedFile = event.target.files?.[0];
-    if (selectedFile) {
+    if (selectedFile && selectedFile.type.startsWith('image/')) {
       const reader = new FileReader();
       reader.onload = (e) => {
         setFile(e.target?.result as string);
@@ -46,17 +46,12 @@ export default function UploadDialog({ children, onUploadComplete }: { children:
       </DialogTrigger>
       <DialogContent className="sm:max-w-[525px]">
         <DialogHeader>
-          <DialogTitle>Upload Media</DialogTitle>
+          <DialogTitle>Upload Image</DialogTitle>
         </DialogHeader>
         <div className="grid gap-4 py-4">
           {file ? (
             <div className="flex flex-col items-center gap-4">
-              {fileType?.startsWith('image/') && (
-                <img src={file} alt="Preview" className="max-h-80 rounded-lg" />
-              )}
-              {fileType?.startsWith('video/') && (
-                <video src={file} controls className="max-h-80 rounded-lg" />
-              )}
+              <img src={file} alt="Preview" className="max-h-80 rounded-lg" />
               <div className="flex gap-2">
                 <Button variant="outline" onClick={() => { setFile(null); setFileType(null); }}>Upload Another</Button>
                 <Button onClick={handleSubmit}>Submit</Button>
@@ -65,8 +60,8 @@ export default function UploadDialog({ children, onUploadComplete }: { children:
           ) : (
             <div className="flex flex-col items-center justify-center gap-4 p-8 border-2 border-dashed rounded-lg">
                 <UploadCloud className="h-12 w-12 text-muted-foreground" />
-                <p className="text-muted-foreground">Drag & drop a file or click to upload</p>
-                <Input id="file-upload" type="file" className="sr-only" onChange={handleFileChange} accept="image/*,video/*" />
+                <p className="text-muted-foreground">Drag & drop an image or click to upload</p>
+                <Input id="file-upload" type="file" className="sr-only" onChange={handleFileChange} accept="image/*" />
                 <Button asChild>
                     <label htmlFor="file-upload">Browse File</label>
                 </Button>

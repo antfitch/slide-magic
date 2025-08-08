@@ -53,24 +53,14 @@ export default function SlideIntro() {
       </div>
       <div className="flex items-center justify-center">
         <UploadDialog onUploadComplete={handleUploadComplete}>
-          {media.type.startsWith('image/') ? (
-            <Image
-              src={media.src}
-              alt={media.alt}
-              width={media.width}
-              height={media.height}
-              data-ai-hint={media.hint}
-              className="rounded-lg shadow-2xl cursor-pointer"
-            />
-          ) : (
-            <video
-              src={media.src}
-              width={media.width}
-              height={media.height}
-              controls
-              className="rounded-lg shadow-2xl cursor-pointer"
-            />
-          )}
+          <Image
+            src={media.src}
+            alt={media.alt}
+            width={media.width}
+            height={media.height}
+            data-ai-hint={media.hint}
+            className="rounded-lg shadow-2xl cursor-pointer"
+          />
         </UploadDialog>
       </div>
     </div>
