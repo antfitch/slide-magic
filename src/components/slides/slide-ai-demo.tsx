@@ -41,31 +41,31 @@ export default function SlideAiDemo({ onGenerate }: SlideAiDemoProps) {
       </p>
       
       <div className="grid md:grid-cols-2 gap-4 items-stretch">
-        <Card className="text-left">
+        <Card className="text-left flex flex-col">
           <CardHeader>
             <CardTitle className="font-headline">Product Description</CardTitle>
           </CardHeader>
-          <CardContent className="space-y-4">
+          <CardContent className="space-y-4 flex-grow">
             <Textarea
               value={productDescription}
               onChange={(e) => setProductDescription(e.target.value)}
               placeholder="Describe your product here..."
-              className="min-h-[150px] font-code text-sm"
+              className="min-h-[150px] font-code text-sm h-full"
             />
-            <Button onClick={handleGenerate} disabled={isLoading}>
+             <Button onClick={handleGenerate} disabled={isLoading}>
               {isLoading ? <Loader className="animate-spin mr-2" /> : null}
               {isLoading ? 'Generating...' : 'Generate Excerpt'}
             </Button>
           </CardContent>
         </Card>
-        <Card className="text-left">
+        <Card className="text-left flex flex-col">
           <CardHeader>
             <CardTitle className="font-headline">Generated Excerpt</CardTitle>
             <CardDescription>The AI will generate a sample documentation excerpt here.</CardDescription>
           </CardHeader>
-          <CardContent>
+          <CardContent className="flex-grow">
             <ScrollArea className="h-full max-h-[360px] w-full rounded-lg border shadow-inner bg-muted p-4">
-                <pre className="font-code text-sm whitespace-pre-wrap min-h-[150px]">
+                <pre className="font-code text-sm whitespace-pre-wrap">
                   {isLoading ? <span className="text-muted-foreground">Generating...</span> : generatedExcerpt || 'Generated content will appear here...'}
                 </pre>
             </ScrollArea>
