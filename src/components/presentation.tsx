@@ -2,11 +2,11 @@
 "use client";
 
 import { useState, useEffect } from 'react';
-import { ChevronLeft, ChevronRight } from 'lucide-react';
+import { ChevronLeft, ChevronRight, Settings } from 'lucide-react';
 
 import { Button } from '@/components/ui/button';
 import { Progress } from '@/components/ui/progress';
-import { ThemeToggle } from '@/components/theme-toggle';
+import { AdminMenu } from '@/components/admin-menu';
 
 import SlideTitle from '@/components/slides/slide-title';
 import SlideIntro from '@/components/slides/slide-intro';
@@ -30,6 +30,12 @@ const slides = [
   { component: SlideResources, key: 'resources' },
 ];
 
+export interface Colors {
+  primary: string;
+  accent: string;
+  background: string;
+}
+
 export default function Presentation() {
   const [currentSlide, setCurrentSlide] = useState(0);
   const [introMedia, setIntroMedia] = useState({
@@ -48,6 +54,11 @@ export default function Presentation() {
     alt: 'A seed growing into a large tree',
     hint: 'seed tree',
   });
+  const [colors, setColors] = useState<Colors>({
+    primary: '243 82% 62%',
+    accent: '26 100% 50%',
+    background: '231 60% 94%',
+  });
 
   useEffect(() => {
     const savedIntroMedia = localStorage.getItem('introMedia');
@@ -57,6 +68,12 @@ export default function Presentation() {
     const savedSolutionMedia = localStorage.getItem('solutionMedia');
     if (savedSolutionMedia) {
       setSolutionMedia(JSON.parse(savedSolutionMedia));
+    }
+    const savedColors = localStorage.getItem('customColors');
+    if (savedColors) {
+      const parsedColors = JSON.parse(savedColors);
+      setColors(parsedColors);
+      updateCssVariables(parsedColors);
     }
   }, []);
 
@@ -71,7 +88,19 @@ export default function Presentation() {
     setSolutionMedia(newMedia);
     localStorage.setItem('solutionMedia', JSON.stringify(newMedia));
   };
+
+  const updateCssVariables = (newColors: Colors) => {
+    document.documentElement.style.setProperty('--primary', newColors.primary);
+    document.documentElement.style.setProperty('--accent', newColors.accent);
+    document.documentElement.style.setProperty('--background', newColors.background);
+  };
   
+  const handleColorChange = (newColors: Colors) => {
+    setColors(newColors);
+    localStorage.setItem('customColors', JSON.stringify(newColors));
+    updateCssVariables(newColors);
+  };
+
   const slideComponents = {
     'title': <SlideTitle />,
     'intro': <SlideIntro media={introMedia} onUploadComplete={handleIntroUploadComplete} />,
@@ -117,7 +146,11 @@ export default function Presentation() {
       <header className="absolute top-0 left-0 right-0 p-4 md:p-8">
         <div className="flex items-center justify-between max-w-5xl mx-auto">
           <h1 className="text-2xl font-headline font-bold text-primary">DocuVision</h1>
-          <ThemeToggle />
+          <AdminMenu colors={colors} onColorChange={handleColorChange}>
+             <Button variant="outline" size="icon">
+                <Settings className="h-4 w-4" />
+             </Button>
+          </AdminMenu>
         </div>
       </header>
 
