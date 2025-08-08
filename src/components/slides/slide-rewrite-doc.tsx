@@ -55,7 +55,7 @@ export default function SlideRewriteDoc({
             <CardDescription>Vague and incomplete.</CardDescription>
           </CardHeader>
           <CardContent className="flex-grow">
-            <ScrollArea className="h-full max-h-[360px] w-full rounded-lg border shadow-inner">
+            <ScrollArea className="h-full max-h-[288px] w-full rounded-lg border shadow-inner">
                 <ImageSelectDialog onImageSelect={onBeforeUploadComplete} onImageRemove={onBeforeImageRemove} mediaFiles={mediaFiles}>
                   <Image
                     src={beforeMedia.src}
@@ -83,7 +83,7 @@ export default function SlideRewriteDoc({
             <CardDescription>Clear, with syntax and examples.</CardDescription>
           </CardHeader>
           <CardContent className="flex-grow">
-            <ScrollArea className="h-full max-h-[360px] w-full rounded-lg border shadow-inner">
+            <ScrollArea className="h-full max-h-[288px] w-full rounded-lg border shadow-inner">
                 <ImageSelectDialog onImageSelect={onAfterUploadComplete} onImageRemove={onAfterImageRemove} mediaFiles={mediaFiles}>
                   <Image
                     src={afterMedia.src}
