@@ -72,7 +72,7 @@ export default function Presentation() {
     hint: 'writer code',
   });
   const [solutionMedia, setSolutionMedia] = useState({
-    src: 'https://storage.googleapis.com/project-spark-348216.appspot.com/static/f0926e5e-6a52-4364-92d5-45279b908489/_0.png',
+    src: 'https://storage.googleapis.com/project-spark-348216.appspot.com/static/476c818a-a639-4787-83d4-13653114f04d/_0.png',
     type: 'image/png',
     width: 600,
     height: 600,
