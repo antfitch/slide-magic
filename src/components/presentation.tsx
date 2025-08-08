@@ -40,8 +40,8 @@ const slides = [
       )
     } 
   },
-  { component: SlideAiDemo, key: 'demo', props: {} },
   { component: SlideResults, key: 'results', props: {} },
+  { component: SlideAiDemo, key: 'demo', props: {} },
   { component: SlideResources, key: 'resources', props: {} },
 ];
 
