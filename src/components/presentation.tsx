@@ -102,16 +102,11 @@ export default function Presentation() {
         setFonts(parsedFonts);
         updateFontStyles(parsedFonts);
     }
-    const savedIntroMedia = localStorage.getItem('introMedia');
-    if (savedIntroMedia) {
-        setIntroMedia(JSON.parse(savedIntroMedia));
-    }
   }, []);
 
   const handleIntroUploadComplete = (file: string, fileType: string) => {
     const newMedia = { ...introMedia, src: file, type: fileType };
     setIntroMedia(newMedia);
-    localStorage.setItem('introMedia', JSON.stringify(newMedia));
   };
 
   const handleSolutionUploadComplete = (file: string, fileType: string) => {
