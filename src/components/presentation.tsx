@@ -13,6 +13,7 @@ import SlideIntro from '@/components/slides/slide-intro';
 import SlideProblem from '@/components/slides/slide-problem';
 import SlideSolution from '@/components/slides/slide-solution';
 import SlideExperiment from '@/components/slides/slide-experiment';
+import SlideExperiment2 from '@/components/slides/slide-experiment-2';
 import SlideRewriteDoc from '@/components/slides/slide-rewrite-doc';
 import SlideAiDemo from '@/components/slides/slide-ai-demo';
 import SlideResults from '@/components/slides/slide-results';
@@ -25,6 +26,7 @@ const slides = [
   { component: SlideProblem, key: 'problem' },
   { component: SlideSolution, key: 'solution' },
   { component: SlideExperiment, key: 'experiment' },
+  { component: SlideExperiment2, key: 'experiment2' },
   { component: SlideRewriteDoc, key: 'rewrite' },
   { component: SlideAiDemo, key: 'demo' },
   { component: SlideResults, key: 'results' },
@@ -162,6 +164,7 @@ export default function Presentation({ mediaFiles }: PresentationProps) {
     'problem': <SlideProblem />,
     'solution': <SlideSolution media={solutionMedia} onUploadComplete={handleSolutionUploadComplete} mediaFiles={mediaFiles} />,
     'experiment': <SlideExperiment />,
+    'experiment2': <SlideExperiment2 />,
     'rewrite': <SlideRewriteDoc />,
     'demo': <SlideAiDemo onGenerate={generateDocumentationExcerpt} />,
     'results': <SlideResults />,
