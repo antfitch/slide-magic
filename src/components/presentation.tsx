@@ -36,6 +36,34 @@ export interface Colors {
   background: string;
 }
 
+const fontMap = {
+  'inter-space-grotesk': {
+    name: 'Inter / Space Grotesk',
+    body: 'font-inter',
+    headline: 'font-space-grotesk',
+    url: 'https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&family=Space+Grotesk:wght@500;700&display=swap'
+  },
+  'roboto-slab-roboto': {
+    name: 'Roboto Slab / Roboto',
+    body: 'font-roboto-slab',
+    headline: 'font-roboto',
+    url: 'https://fonts.googleapis.com/css2?family=Roboto:wght@500;700&family=Roboto+Slab:wght@400;500;600;700&display=swap'
+  },
+  'lato-merriweather': {
+    name: 'Lato / Merriweather',
+    body: 'font-lato',
+    headline: 'font-merriweather',
+    url: 'https://fonts.googleapis.com/css2?family=Lato:wght@400;700&family=Merriweather:wght@400;700&display=swap'
+  },
+  'source-sans-pro-playfair-display': {
+    name: 'Source Sans Pro / Playfair Display',
+    body: 'font-source-sans-pro',
+    headline: 'font-playfair-display',
+    url: 'https://fonts.googleapis.com/css2?family=Source+Sans+Pro:wght@400;600;700&family=Playfair+Display:wght@500;700&display=swap'
+  },
+};
+type FontKey = keyof typeof fontMap;
+
 export default function Presentation() {
   const [currentSlide, setCurrentSlide] = useState(0);
   const [introMedia, setIntroMedia] = useState({
@@ -59,6 +87,7 @@ export default function Presentation() {
     accent: '26 100% 50%',
     background: '231 60% 94%',
   });
+  const [font, setFont] = useState<FontKey>('inter-space-grotesk');
 
   useEffect(() => {
     const savedIntroMedia = localStorage.getItem('introMedia');
@@ -74,6 +103,10 @@ export default function Presentation() {
       const parsedColors = JSON.parse(savedColors);
       setColors(parsedColors);
       updateCssVariables(parsedColors);
+    }
+    const savedFont = localStorage.getItem('customFont') as FontKey;
+    if (savedFont && fontMap[savedFont]) {
+      handleFontChange(savedFont);
     }
   }, []);
 
@@ -99,6 +132,32 @@ export default function Presentation() {
     setColors(newColors);
     localStorage.setItem('customColors', JSON.stringify(newColors));
     updateCssVariables(newColors);
+  };
+
+  const handleFontChange = (newFont: FontKey) => {
+    setFont(newFont);
+    localStorage.setItem('customFont', newFont);
+    const fontData = fontMap[newFont];
+    
+    // Update font link
+    const fontLink = document.getElementById('font-link') as HTMLLinkElement;
+    if (fontLink) {
+      fontLink.href = fontData.url;
+    }
+
+    // Update body and headline font classes on tailwind config
+    document.body.style.setProperty('--font-body', fontData.name.split(' / ')[0]);
+    document.body.style.setProperty('--font-headline', fontData.name.split(' / ')[1]);
+
+    // This is a bit of a hack to get tailwind to re-evaluate the font families
+    document.body.classList.forEach(className => {
+        if (className.startsWith('font-')) {
+            document.body.classList.remove(className);
+        }
+    });
+
+    document.body.classList.add(fontData.body);
+    // You might need a way to apply headline class to relevant elements
   };
 
   const slideComponents = {
@@ -142,11 +201,16 @@ export default function Presentation() {
   const progressValue = ((currentSlide + 1) / slides.length) * 100;
 
   return (
-    <div className="flex flex-col h-full w-full bg-background items-center justify-center p-8 relative overflow-hidden">
+    <div className={`flex flex-col h-full w-full bg-background items-center justify-center p-8 relative overflow-hidden font-['var(--font-body)']`}>
       <header className="absolute top-0 left-0 right-0 p-4 md:p-8">
         <div className="flex items-center justify-between max-w-5xl mx-auto">
           <h1 className="text-2xl font-headline font-bold text-primary">DocuVision</h1>
-          <AdminMenu colors={colors} onColorChange={handleColorChange}>
+          <AdminMenu 
+            colors={colors} 
+            onColorChange={handleColorChange}
+            font={font}
+            onFontChange={(newFont) => handleFontChange(newFont as FontKey)}
+          >
              <Button variant="outline" size="icon">
                 <Settings className="h-4 w-4" />
              </Button>

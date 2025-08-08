@@ -10,9 +10,17 @@ export default {
   theme: {
     extend: {
       fontFamily: {
-        body: ['Inter', 'sans-serif'],
-        headline: ['"Space Grotesk"', 'sans-serif'],
+        body: ["var(--font-body)", 'sans-serif'],
+        headline: ["var(--font-headline)", 'sans-serif'],
         code: ['monospace'],
+        'inter': ['Inter', 'sans-serif'],
+        'space-grotesk': ['"Space Grotesk"', 'sans-serif'],
+        'roboto-slab': ['"Roboto Slab"', 'serif'],
+        'roboto': ['Roboto', 'sans-serif'],
+        'lato': ['Lato', 'sans-serif'],
+        'merriweather': ['Merriweather', 'serif'],
+        'source-sans-pro': ['"Source Sans Pro"', 'sans-serif'],
+        'playfair-display': ['"Playfair Display"', 'serif'],
       },
       colors: {
         background: 'hsl(var(--background))',

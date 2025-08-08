@@ -8,12 +8,15 @@ import { Input } from "@/components/ui/input";
 import { Button } from "@/components/ui/button";
 import { ThemeToggle } from '@/components/theme-toggle';
 import { Separator } from '@/components/ui/separator';
+import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from "@/components/ui/select";
 import type { Colors } from '@/components/presentation';
 
 interface AdminMenuProps {
   children: React.ReactNode;
   colors: Colors;
   onColorChange: (newColors: Colors) => void;
+  font: string;
+  onFontChange: (newFont: string) => void;
 }
 
 function hexToHsl(hex: string): string | null {
@@ -75,7 +78,7 @@ function hslToHex(hsl: string): string {
 }
 
 
-export function AdminMenu({ children, colors, onColorChange }: AdminMenuProps) {
+export function AdminMenu({ children, colors, onColorChange, font, onFontChange }: AdminMenuProps) {
     const [localColors, setLocalColors] = useState({
         primary: hslToHex(colors.primary),
         accent: hslToHex(colors.accent),
@@ -119,6 +122,23 @@ export function AdminMenu({ children, colors, onColorChange }: AdminMenuProps) {
                     <div className="space-y-2">
                         <Label className="font-semibold">Theme</Label>
                         <ThemeToggle />
+                    </div>
+
+                    <Separator />
+
+                    <div className="space-y-4">
+                        <Label className="font-semibold">Fonts</Label>
+                        <Select value={font} onValueChange={onFontChange}>
+                            <SelectTrigger>
+                                <SelectValue placeholder="Select a font pair" />
+                            </SelectTrigger>
+                            <SelectContent>
+                                <SelectItem value="inter-space-grotesk">Sans Serif / Grotesk</SelectItem>
+                                <SelectItem value="roboto-slab-roboto">Slab / Sans Serif</SelectItem>
+                                <SelectItem value="lato-merriweather">Sans Serif / Serif</SelectItem>
+                                <SelectItem value="source-sans-pro-playfair-display">Sans Serif / Serif</SelectItem>
+                            </SelectContent>
+                        </Select>
                     </div>
 
                     <Separator />
