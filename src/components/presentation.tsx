@@ -90,14 +90,6 @@ export default function Presentation() {
   });
 
   useEffect(() => {
-    const savedIntroMedia = localStorage.getItem('introMedia');
-    if (savedIntroMedia) {
-      setIntroMedia(JSON.parse(savedIntroMedia));
-    }
-    const savedSolutionMedia = localStorage.getItem('solutionMedia');
-    if (savedSolutionMedia) {
-      setSolutionMedia(JSON.parse(savedSolutionMedia));
-    }
     const savedColors = localStorage.getItem('customColors');
     if (savedColors) {
       const parsedColors = JSON.parse(savedColors);
@@ -115,13 +107,11 @@ export default function Presentation() {
   const handleIntroUploadComplete = (file: string, fileType: string) => {
     const newMedia = { ...introMedia, src: file, type: fileType };
     setIntroMedia(newMedia);
-    localStorage.setItem('introMedia', JSON.stringify(newMedia));
   };
 
   const handleSolutionUploadComplete = (file: string, fileType: string) => {
     const newMedia = { ...solutionMedia, src: file, type: fileType };
     setSolutionMedia(newMedia);
-    localStorage.setItem('solutionMedia', JSON.stringify(newMedia));
   };
 
   const updateCssVariables = (newColors: Colors) => {
