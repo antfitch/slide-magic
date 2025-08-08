@@ -78,10 +78,10 @@ export default function Presentation({ mediaFiles }: PresentationProps) {
     hint: 'writer code',
   });
   const [solutionMedia, setSolutionMedia] = useState({
-    src: 'https://placehold.co/600x600.png',
+    src: 'https://placehold.co/400x400.png',
     type: 'image/png',
-    width: 600,
-    height: 600,
+    width: 400,
+    height: 400,
     alt: 'Illustration comparing sick and healthy seeds growing into sick and healthy trees.',
     hint: 'seed tree',
   });
