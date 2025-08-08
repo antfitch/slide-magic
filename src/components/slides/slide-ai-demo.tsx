@@ -1,121 +1,66 @@
-"use client";
-
-import { useState } from 'react';
-import { Sparkles, Loader2 } from 'lucide-react';
-import { useForm, type SubmitHandler } from 'react-hook-form';
-import { zodResolver } from '@hookform/resolvers/zod';
-import { z } from 'zod';
-
 import { Card, CardContent, CardDescription, CardHeader, CardTitle } from '@/components/ui/card';
-import { Textarea } from '@/components/ui/textarea';
-import { Button } from '@/components/ui/button';
-import { Form, FormControl, FormField, FormItem, FormLabel, FormMessage } from '@/components/ui/form';
-import { useToast } from '@/hooks/use-toast';
-import { generateDocumentationExcerpt } from '@/ai/flows/generate-documentation-excerpt';
-
-const FormSchema = z.object({
-  productDescription: z.string().min(20, {
-    message: "Please provide a more detailed product description (at least 20 characters)."
-  }),
-});
-
-type FormValues = z.infer<typeof FormSchema>;
+import { ArrowRight, Sparkles, CheckCircle, XCircle } from 'lucide-react';
 
 export default function SlideAiDemo() {
-  const [generatedDoc, setGeneratedDoc] = useState('');
-  const [isLoading, setIsLoading] = useState(false);
-  const { toast } = useToast();
+  const beforeDoc = `collectionElement:
+  ifElement
+  | forElement
+  | ...`;
 
-  const form = useForm<FormValues>({
-    resolver: zodResolver(FormSchema),
-    defaultValues: {
-      productDescription: "",
-    },
-  });
+  const afterDoc = `An if-case element allows you to conditionally include a single element in a collection, with an optional else clause:
 
-  const onSubmit: SubmitHandler<FormValues> = async (data) => {
-    setIsLoading(true);
-    setGeneratedDoc('');
-    try {
-      const result = await generateDocumentationExcerpt({ productDescription: data.productDescription });
-      setGeneratedDoc(result.documentationExcerpt);
-    } catch (error) {
-      console.error("Error generating documentation:", error);
-      toast({
-        variant: "destructive",
-        title: "An error occurred",
-        description: "Failed to generate documentation. Please try again.",
-      });
-    } finally {
-      setIsLoading(false);
-    }
-  };
+if (<condition>) <element> else <element>
+
+if (<condition>) <element> else if (<condition>) <element>
+
+if (isSummer) 'Slippers'
+
+if (isSummer) ...?sandals`;
 
   return (
-    <div className="w-full max-w-4xl mx-auto">
-      <h2 className="font-headline text-4xl md:text-5xl font-bold text-primary text-center mb-8">
-        See It In Action
+    <div className="w-full text-center space-y-8">
+      <h2 className="font-headline text-4xl md:text-5xl font-bold text-primary">
+        Rewriting the Product Doc
       </h2>
-      <Card className="shadow-2xl">
-        <CardHeader>
-          <CardTitle className="font-headline flex items-center gap-2">
-            <Sparkles className="text-accent" />
-            AI Documentation Generator
-          </CardTitle>
-          <CardDescription>
-            Enter a short description of a product or feature, and our AI will generate a sample documentation excerpt. Notice how a clear description yields better results.
-          </CardDescription>
-        </CardHeader>
-        <CardContent>
-          <Form {...form}>
-            <form onSubmit={form.handleSubmit(onSubmit)} className="space-y-6">
-              <FormField
-                control={form.control}
-                name="productDescription"
-                render={({ field }) => (
-                  <FormItem>
-                    <FormLabel>Product Description</FormLabel>
-                    <FormControl>
-                      <Textarea
-                        placeholder="e.g., A JavaScript library that creates interactive charts from JSON data. It supports bar, line, and pie charts."
-                        className="min-h-[100px]"
-                        {...field}
-                      />
-                    </FormControl>
-                    <FormMessage />
-                  </FormItem>
-                )}
-              />
-              <Button type="submit" disabled={isLoading} className="bg-accent hover:bg-accent/90 text-accent-foreground">
-                {isLoading ? (
-                  <Loader2 className="mr-2 h-4 w-4 animate-spin" />
-                ) : (
-                  <Sparkles className="mr-2 h-4 w-4" />
-                )}
-                Generate Excerpt
-              </Button>
-            </form>
-          </Form>
+      <p className="text-lg text-foreground/80 max-w-4xl mx-auto">
+        I wanted to see what would happen to the LLM response if I rewrote the documentation for the 'if' element. Would the response get better? I worked with the engineer and rewrote the docs.
+      </p>
+      
+      <div className="grid md:grid-cols-[1fr_auto_1fr] gap-4 items-center">
+        {/* Before */}
+        <Card className="text-left">
+          <CardHeader>
+            <CardTitle className="font-headline flex items-center gap-2">
+              <XCircle className="text-destructive" /> Before
+            </CardTitle>
+            <CardDescription>Vague and incomplete.</CardDescription>
+          </CardHeader>
+          <CardContent>
+            <pre className="font-code text-sm bg-muted p-4 rounded-md whitespace-pre-wrap">{beforeDoc}</pre>
+          </CardContent>
+        </Card>
 
-          {(isLoading || generatedDoc) && (
-            <div className="mt-8">
-                <h3 className="font-headline text-lg font-semibold mb-2">Generated Excerpt:</h3>
-                <Card className="bg-muted/50 p-4 min-h-[150px]">
-                    {isLoading ? (
-                         <div className="flex items-center justify-center h-full text-muted-foreground">
-                            <Loader2 className="mr-2 h-6 w-6 animate-spin" />
-                            <p>Generating...</p>
-                        </div>
-                    ) : (
-                        <pre className="font-code text-sm whitespace-pre-wrap text-foreground">
-                            {generatedDoc}
-                        </pre>
-                    )}
-                </Card>
-            </div>
-          )}
-        </CardContent>
-      </Card>
+        <ArrowRight className="h-12 w-12 text-primary hidden md:block" />
+
+        {/* After */}
+        <Card className="text-left">
+          <CardHeader>
+            <CardTitle className="font-headline flex items-center gap-2">
+              <CheckCircle className="text-primary" /> After
+            </CardTitle>
+            <CardDescription>Clear, with syntax and examples.</CardDescription>
+          </CardHeader>
+          <CardContent>
+            <pre className="font-code text-sm bg-muted p-4 rounded-md whitespace-pre-wrap">{afterDoc}</pre>
+          </CardContent>
+        </Card>
+      </div>
+
+       <h3 className="font-headline text-3xl font-bold pt-8">The Results Were Good</h3>
+      <p className="text-lg text-foreground/80 max-w-4xl mx-auto">
+        Three weeks later, I re-ran the same prompt. Gemini 2.0's answers were much better. It included the `else` part, provided samples for lists, sets, and maps, and used the more precise terminology from the new documentation.
+      </p>
+
     </div>
   );
 }

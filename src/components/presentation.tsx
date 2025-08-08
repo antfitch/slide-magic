@@ -10,6 +10,7 @@ import SlideTitle from '@/components/slides/slide-title';
 import SlideIntro from '@/components/slides/slide-intro';
 import SlideProblem from '@/components/slides/slide-problem';
 import SlideSolution from '@/components/slides/slide-solution';
+import SlideExperiment from '@/components/slides/slide-experiment';
 import SlideAiDemo from '@/components/slides/slide-ai-demo';
 import SlideResources from '@/components/slides/slide-resources';
 
@@ -18,6 +19,7 @@ const slides = [
   { component: SlideIntro, key: 'intro' },
   { component: SlideProblem, key: 'problem' },
   { component: SlideSolution, key: 'solution' },
+  { component: SlideExperiment, key: 'experiment' },
   { component: SlideAiDemo, key: 'demo' },
   { component: SlideResources, key: 'resources' },
 ];
