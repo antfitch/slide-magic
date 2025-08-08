@@ -64,7 +64,7 @@ const slides = [
   },
   { component: SlideRanked, key: 'ranked-4', props: {
       title: "4. Code",
-      description: "The code itself is a source of truth, but it's often less accessible to the LLM than well-structured documentation. It's used to verify and supplement information from other sources.",
+      description: "The code itself is a source of truth, but it's often less accessible to the LLM than well-structured documentation. It's used to verify and supplement information from other sources. The CHANGELOG was given high priority, but the README was not.",
       rank: 4
     }
   },
