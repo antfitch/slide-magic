@@ -69,32 +69,36 @@ interface PresentationProps {
     mediaFiles: string[];
 }
 
+const initialIntroMedia = {
+  src: 'https://placehold.co/500x500.png',
+  type: 'image/png',
+  width: 500,
+  height: 500,
+  alt: 'A technical writer looking at a screen with code and documentation',
+  hint: 'writer code',
+};
+const initialSolutionMedia = {
+  src: 'https://placehold.co/300x300.png',
+  type: 'image/png',
+  width: 300,
+  height: 300,
+  alt: 'Illustration comparing sick and healthy seeds growing into sick and healthy trees.',
+  hint: 'seed tree',
+};
+const initialExperimentMedia = {
+  src: 'https://placehold.co/500x500.png',
+  type: 'image/png',
+  width: 500,
+  height: 500,
+  alt: 'An image showing the investigation process',
+  hint: 'investigation board',
+};
+
 export default function Presentation({ mediaFiles }: PresentationProps) {
   const [currentSlide, setCurrentSlide] = useState(0);
-  const [introMedia, setIntroMedia] = useState({
-    src: 'https://placehold.co/500x500.png',
-    type: 'image/png',
-    width: 500,
-    height: 500,
-    alt: 'A technical writer looking at a screen with code and documentation',
-    hint: 'writer code',
-  });
-  const [solutionMedia, setSolutionMedia] = useState({
-    src: 'https://placehold.co/300x300.png',
-    type: 'image/png',
-    width: 300,
-    height: 300,
-    alt: 'Illustration comparing sick and healthy seeds growing into sick and healthy trees.',
-    hint: 'seed tree',
-  });
-  const [experimentMedia, setExperimentMedia] = useState({
-    src: 'https://placehold.co/500x500.png',
-    type: 'image/png',
-    width: 500,
-    height: 500,
-    alt: 'An image showing the investigation process',
-    hint: 'investigation board',
-  });
+  const [introMedia, setIntroMedia] = useState(initialIntroMedia);
+  const [solutionMedia, setSolutionMedia] = useState(initialSolutionMedia);
+  const [experimentMedia, setExperimentMedia] = useState(initialExperimentMedia);
   const [colors, setColors] = useState<Colors>({
     primary: '243 82% 62%',
     accent: '26 100% 50%',
@@ -136,15 +140,27 @@ export default function Presentation({ mediaFiles }: PresentationProps) {
     setIntroMedia({ ...introMedia, src: file, type: fileType });
     localStorage.setItem('introMediaSrc', file);
   };
+  const handleIntroImageRemove = () => {
+    setIntroMedia(initialIntroMedia);
+    localStorage.removeItem('introMediaSrc');
+  };
 
   const handleSolutionUploadComplete = (file: string, fileType: string) => {
     setSolutionMedia({ ...solutionMedia, src: file, type: fileType });
     localStorage.setItem('solutionMediaSrc', file);
   };
+  const handleSolutionImageRemove = () => {
+    setSolutionMedia(initialSolutionMedia);
+    localStorage.removeItem('solutionMediaSrc');
+  };
   
   const handleExperimentUploadComplete = (file: string, fileType: string) => {
     setExperimentMedia({ ...experimentMedia, src: file, type: fileType });
     localStorage.setItem('experimentMediaSrc', file);
+  };
+  const handleExperimentImageRemove = () => {
+    setExperimentMedia(initialExperimentMedia);
+    localStorage.removeItem('experimentMediaSrc');
   };
 
   const updateCssVariables = (newColors: Colors) => {
@@ -177,10 +193,10 @@ export default function Presentation({ mediaFiles }: PresentationProps) {
 
   const slideComponents = {
     'title': <SlideTitle />,
-    'intro': <SlideIntro media={introMedia} onUploadComplete={handleIntroUploadComplete} mediaFiles={mediaFiles} />,
+    'intro': <SlideIntro media={introMedia} onUploadComplete={handleIntroUploadComplete} onImageRemove={handleIntroImageRemove} mediaFiles={mediaFiles} />,
     'problem': <SlideProblem />,
-    'solution': <SlideSolution media={solutionMedia} onUploadComplete={handleSolutionUploadComplete} mediaFiles={mediaFiles} />,
-    'experiment': <SlideExperiment media={experimentMedia} onUploadComplete={handleExperimentUploadComplete} mediaFiles={mediaFiles} />,
+    'solution': <SlideSolution media={solutionMedia} onUploadComplete={handleSolutionUploadComplete} onImageRemove={handleSolutionImageRemove} mediaFiles={mediaFiles} />,
+    'experiment': <SlideExperiment media={experimentMedia} onUploadComplete={handleExperimentUploadComplete} onImageRemove={handleExperimentImageRemove} mediaFiles={mediaFiles} />,
     'experiment2': <SlideExperiment2 />,
     'rewrite': <SlideRewriteDoc />,
     'demo': <SlideAiDemo onGenerate={generateDocumentationExcerpt} />,

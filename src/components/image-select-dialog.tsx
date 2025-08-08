@@ -2,17 +2,23 @@
 "use client";
 
 import { useState } from 'react';
-import { Dialog, DialogContent, DialogHeader, DialogTitle, DialogTrigger } from "@/components/ui/dialog";
+import { Dialog, DialogContent, DialogHeader, DialogTitle, DialogTrigger, DialogFooter } from "@/components/ui/dialog";
 import { ScrollArea } from '@/components/ui/scroll-area';
+import { Button } from '@/components/ui/button';
 import Image from 'next/image';
 
-export default function ImageSelectDialog({ children, onImageSelect, mediaFiles }: { children: React.ReactNode, onImageSelect: (file: string, fileType: string) => void, mediaFiles: string[] }) {
+export default function ImageSelectDialog({ children, onImageSelect, onImageRemove, mediaFiles }: { children: React.ReactNode, onImageSelect: (file: string, fileType: string) => void, onImageRemove: () => void, mediaFiles: string[] }) {
   const [isOpen, setIsOpen] = useState(false);
   
   const handleImageSelect = (file: string) => {
     // Assuming file type from extension, which is not ideal but works for this case.
     const fileType = `image/${file.split('.').pop()}`;
     onImageSelect(file, fileType);
+    setIsOpen(false);
+  };
+
+  const handleRemoveClick = () => {
+    onImageRemove();
     setIsOpen(false);
   };
 
@@ -41,6 +47,9 @@ export default function ImageSelectDialog({ children, onImageSelect, mediaFiles 
             )}
             </div>
         </ScrollArea>
+        <DialogFooter>
+          <Button variant="destructive" onClick={handleRemoveClick}>Remove Image</Button>
+        </DialogFooter>
       </DialogContent>
     </Dialog>
   );

@@ -18,10 +18,11 @@ interface Media {
 interface SlideExperimentProps {
   media: Media;
   onUploadComplete: (file: string, fileType: string) => void;
+  onImageRemove: () => void;
   mediaFiles: string[];
 }
 
-export default function SlideExperiment({ media, onUploadComplete, mediaFiles }: SlideExperimentProps) {
+export default function SlideExperiment({ media, onUploadComplete, onImageRemove, mediaFiles }: SlideExperimentProps) {
   return (
     <div className="w-full text-center space-y-8">
       <h2 className="font-headline text-4xl md:text-5xl font-bold text-primary">
@@ -50,7 +51,7 @@ export default function SlideExperiment({ media, onUploadComplete, mediaFiles }:
           </CardContent>
         </Card>
         <div className="flex items-center justify-center h-full">
-            <ImageSelectDialog onImageSelect={onUploadComplete} mediaFiles={mediaFiles}>
+            <ImageSelectDialog onImageSelect={onUploadComplete} onImageRemove={onImageRemove} mediaFiles={mediaFiles}>
               <Image
                 src={media.src}
                 alt={media.alt}

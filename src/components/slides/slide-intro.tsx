@@ -17,11 +17,12 @@ interface Media {
 interface SlideIntroProps {
   media: Media;
   onUploadComplete: (file: string, fileType: string) => void;
+  onImageRemove: () => void;
   mediaFiles: string[];
 }
 
 
-export default function SlideIntro({ media, onUploadComplete, mediaFiles }: SlideIntroProps) {
+export default function SlideIntro({ media, onUploadComplete, onImageRemove, mediaFiles }: SlideIntroProps) {
 
   return (
     <div className="grid md:grid-cols-2 gap-8 lg:gap-16 items-center w-full">
@@ -51,7 +52,7 @@ export default function SlideIntro({ media, onUploadComplete, mediaFiles }: Slid
         </p>
       </div>
       <div className="flex items-center justify-center">
-        <ImageSelectDialog onImageSelect={onUploadComplete} mediaFiles={mediaFiles}>
+        <ImageSelectDialog onImageSelect={onUploadComplete} onImageRemove={onImageRemove} mediaFiles={mediaFiles}>
           <Image
             src={media.src}
             alt={media.alt}

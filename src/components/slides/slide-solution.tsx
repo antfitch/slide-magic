@@ -18,10 +18,11 @@ interface Media {
 interface SlideSolutionProps {
   media: Media;
   onUploadComplete: (file: string, fileType: string) => void;
+  onImageRemove: () => void;
   mediaFiles: string[];
 }
 
-export default function SlideSolution({ media, onUploadComplete, mediaFiles }: SlideSolutionProps) {
+export default function SlideSolution({ media, onUploadComplete, onImageRemove, mediaFiles }: SlideSolutionProps) {
   
   return (
     <div className="w-full text-center space-y-8">
@@ -42,7 +43,7 @@ export default function SlideSolution({ media, onUploadComplete, mediaFiles }: S
               </div>
             </CardHeader>
         </Card>
-        <ImageSelectDialog onImageSelect={onUploadComplete} mediaFiles={mediaFiles}>
+        <ImageSelectDialog onImageSelect={onUploadComplete} onImageRemove={onImageRemove} mediaFiles={mediaFiles}>
           <Image
             src={media.src}
             alt={media.alt}
